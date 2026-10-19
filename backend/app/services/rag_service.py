@@ -51,6 +51,7 @@ class RAGService:
             retrieved = await self.retriever.search(
                 query_embedding,
                 document_ids=document_ids,
+                user_id=user_id,
             )
 
             # 3. Build citations

@@ -9,7 +9,6 @@ from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_asyn
 from sqlalchemy.pool import NullPool
 
 from app.core.config import settings
-from app.models.base import Base
 
 
 # ------------------------------------------------------------------------------
@@ -50,12 +49,13 @@ async def get_db() -> AsyncGenerator[AsyncSession, None]:
 # Lifecycle Management
 # ------------------------------------------------------------------------------
 async def init_db() -> None:
-    """Initialize database - create tables and pgvector extension."""
-    async with engine.begin() as conn:
-        # Enable pgvector extension
-        await conn.execute(text("CREATE EXTENSION IF NOT EXISTS vector"))
-        # Create all tables
-        await conn.run_sync(Base.metadata.create_all)
+    """Check the database is reachable.
+
+    The schema is owned by Alembic: run `python scripts/migrate.py` (the
+    container does this on start) rather than creating tables here.
+    """
+    async with engine.connect() as conn:
+        await conn.execute(text("SELECT 1"))
 
 
 async def close_db() -> None:

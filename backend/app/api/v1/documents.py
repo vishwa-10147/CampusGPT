@@ -6,7 +6,7 @@ import os
 from typing import Optional
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File, Query, BackgroundTasks
+from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File, Form, Query, BackgroundTasks
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
 
@@ -24,6 +24,13 @@ from app.ingestion.ingestion_service import IngestionService
 from app.services.file_service import FileProcessingService
 
 router = APIRouter(prefix="/documents", tags=["Documents"])
+
+EXTENSION_TYPES = {
+    ".pdf": "application/pdf",
+    ".txt": "text/plain",
+    ".md": "text/markdown",
+    ".markdown": "text/markdown",
+}
 
 
 class IngestMgitRequest(BaseModel):
@@ -88,10 +95,17 @@ async def ingest_mgit_sync(
 async def upload_document(
     background_tasks: BackgroundTasks,
     file: UploadFile = File(...),
-    user_id: UUID = Depends(get_current_user_id),
+    share_with_everyone: bool = Form(False),
+    user: User = Depends(get_current_user),
     doc_service: DocumentService = Depends(get_document_service),
 ):
-    """Upload a document for processing."""
+    """Upload a document for processing.
+
+    Uploads are private to the uploader. Admins may share a document with
+    everyone (share_with_everyone=true) to add it to the institutional knowledge base.
+    """
+    if share_with_everyone and not user.is_admin:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Only admins can share documents with everyone")
     # Read file content
     content = await file.read()
     size = len(content)
@@ -101,17 +115,21 @@ async def upload_document(
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Filename required")
 
     content_type = file.content_type or "application/octet-stream"
+    if content_type == "application/octet-stream":
+        # Browsers often send no type for .md/.txt; trust the extension for the allowed kinds
+        content_type = EXTENSION_TYPES.get(os.path.splitext(file.filename)[1].lower(), content_type)
 
     # Create file-like object
     file_obj = io.BytesIO(content)
 
     try:
         document = await doc_service.upload_document(
-            user_id=user_id,
+            user_id=user.id,
             file=file_obj,
             filename=file.filename,
             content_type=content_type,
             size=size,
+            visibility="public" if share_with_everyone else "private",
         )
     except ValueError as e:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))

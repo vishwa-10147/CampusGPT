@@ -22,6 +22,7 @@ export const Chat = () => {
   const [currentConversation, setCurrentConversation] = useState<Conversation | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [titleDraft, setTitleDraft] = useState<string | null>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const createdHereRef = useRef<string | null>(null)
 
@@ -153,6 +154,20 @@ export const Chat = () => {
     },
   })
 
+  // Rename conversation (null draft = not editing)
+  const saveTitle = async () => {
+    const title = titleDraft?.trim()
+    setTitleDraft(null)
+    if (!currentConversation || !title || title === currentConversation.title) return
+    try {
+      const { data } = await conversationApi.update(currentConversation.id, { title })
+      setCurrentConversation(prev => (prev ? { ...prev, title: data.title } : prev))
+      queryClient.invalidateQueries({ queryKey: ['conversations'] })
+    } catch (err: any) {
+      setError(err.response?.data?.detail || 'Failed to rename conversation')
+    }
+  }
+
   // Scroll to bottom
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -174,9 +189,25 @@ export const Chat = () => {
         <div className="mb-6">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h1 className="text-2xl font-bold text-neutral-900">
-                {currentConversation?.title || 'New Conversation'}
-              </h1>
+              {titleDraft !== null ? (
+                <input
+                  autoFocus
+                  aria-label="Conversation title"
+                  className="text-2xl font-bold text-neutral-900 border-b border-primary-500 bg-transparent outline-none w-full"
+                  value={titleDraft}
+                  maxLength={500}
+                  onChange={e => setTitleDraft(e.target.value)}
+                  onBlur={saveTitle}
+                  onKeyDown={e => {
+                    if (e.key === 'Enter') saveTitle()
+                    if (e.key === 'Escape') setTitleDraft(null)
+                  }}
+                />
+              ) : (
+                <h1 className="text-2xl font-bold text-neutral-900">
+                  {currentConversation?.title || 'New Conversation'}
+                </h1>
+              )}
               <p className="text-sm text-neutral-500">
                 {currentConversation
                   ? `${messages.length} messages • Updated ${formatDistanceToNow(new Date(currentConversation.updated_at), { addSuffix: true })}`
@@ -186,7 +217,7 @@ export const Chat = () => {
             <div className="flex items-center gap-2">
               {currentConversation && (
                 <>
-                  <Button variant="ghost" size="sm" onClick={() => {}} aria-label="Edit title">
+                  <Button variant="ghost" size="sm" onClick={() => setTitleDraft(currentConversation.title)} aria-label="Edit title">
                     <Edit2 className="h-4 w-4" />
                   </Button>
                   <Button size="sm" variant="danger" onClick={() => deleteConversation.mutate(currentConversation.id)} aria-label="Delete conversation">

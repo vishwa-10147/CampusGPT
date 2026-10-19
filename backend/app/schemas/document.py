@@ -16,6 +16,7 @@ class DocumentUploadResponse(BaseModel):
     mime_type: str
     size_bytes: int
     status: str
+    visibility: str
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
@@ -29,6 +30,7 @@ class DocumentResponse(BaseModel):
     mime_type: str
     size_bytes: int
     uploaded_by: Optional[UUID]
+    visibility: str
     status: str
     created_at: datetime
     updated_at: datetime

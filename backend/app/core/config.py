@@ -86,10 +86,25 @@ class Settings(BaseSettings):
         return [t.strip() for t in v.split(",")]
 
     # --------------------------------------------------------------------------
+    # Email (verification links)
+    # --------------------------------------------------------------------------
+    require_email_verification: bool = Field(default=True, alias="REQUIRE_EMAIL_VERIFICATION")
+    email_verification_expire_hours: int = Field(default=24, alias="EMAIL_VERIFICATION_EXPIRE_HOURS")
+    # "console" prints emails to the backend log (development); "smtp" sends them
+    email_backend: str = Field(default="console", alias="EMAIL_BACKEND")
+    email_from: str = Field(default="CampusGPT <no-reply@campusgpt.local>", alias="EMAIL_FROM")
+    smtp_host: Optional[str] = Field(default=None, alias="SMTP_HOST")
+    smtp_port: int = Field(default=587, alias="SMTP_PORT")
+    smtp_username: Optional[str] = Field(default=None, alias="SMTP_USERNAME")
+    smtp_password: Optional[str] = Field(default=None, alias="SMTP_PASSWORD")
+    smtp_use_tls: bool = Field(default=True, alias="SMTP_USE_TLS")
+
+    # --------------------------------------------------------------------------
     # Rate Limiting
     # --------------------------------------------------------------------------
     rate_limit_enabled: bool = Field(default=True, alias="RATE_LIMIT_ENABLED")
-    rate_limit_auth_per_minute: int = Field(default=5, alias="RATE_LIMIT_AUTH_PER_MINUTE")
+    rate_limit_auth_per_minute: int = Field(default=5, alias="RATE_LIMIT_AUTH_PER_MINUTE")  # per account
+    rate_limit_auth_per_ip_per_minute: int = Field(default=60, alias="RATE_LIMIT_AUTH_PER_IP_PER_MINUTE")
     rate_limit_chat_per_minute: int = Field(default=30, alias="RATE_LIMIT_CHAT_PER_MINUTE")
     rate_limit_upload_per_hour: int = Field(default=10, alias="RATE_LIMIT_UPLOAD_PER_HOUR")
 

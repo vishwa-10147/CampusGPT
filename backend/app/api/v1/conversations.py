@@ -11,6 +11,7 @@ from app.schemas.conversation import (
     ConversationCreate,
     ConversationUpdate,
     ConversationResponse,
+    ConversationDetailResponse,
     ConversationListResponse,
 )
 from app.services.conversation_service import ConversationService
@@ -39,7 +40,7 @@ async def list_conversations(
     return await conv_service.list_conversations(user_id, page=page, page_size=page_size)
 
 
-@router.get("/{conversation_id}", response_model=ConversationResponse)
+@router.get("/{conversation_id}", response_model=ConversationDetailResponse)
 async def get_conversation(
     conversation_id: UUID,
     user_id: UUID = Depends(get_current_user_id),

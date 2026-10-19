@@ -8,7 +8,13 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.repositories.conversation_repo import ConversationRepository
 from app.repositories.message_repo import MessageRepository
-from app.schemas.conversation import ConversationCreate, ConversationUpdate, ConversationResponse, ConversationListResponse
+from app.schemas.conversation import (
+    ConversationCreate,
+    ConversationUpdate,
+    ConversationResponse,
+    ConversationDetailResponse,
+    ConversationListResponse,
+)
 from app.schemas.message import MessageResponse
 
 
@@ -29,7 +35,7 @@ class ConversationService:
         )
         return ConversationResponse.model_validate(conversation)
 
-    async def get_conversation(self, conversation_id: UUID, user_id: UUID) -> Optional[ConversationResponse]:
+    async def get_conversation(self, conversation_id: UUID, user_id: UUID) -> Optional[ConversationDetailResponse]:
         """Get a conversation with messages."""
         conversation = await self.conv_repo.get_with_messages(conversation_id, user_id)
         if not conversation:
@@ -38,7 +44,7 @@ class ConversationService:
         messages = [
             MessageResponse.model_validate(msg) for msg in conversation.messages
         ]
-        return ConversationResponse(
+        return ConversationDetailResponse(
             id=conversation.id,
             user_id=conversation.user_id,
             title=conversation.title,
@@ -47,6 +53,7 @@ class ConversationService:
             deleted_at=conversation.deleted_at,
             message_count=len(messages),
             last_message_preview=messages[-1].content[:100] if messages else None,
+            messages=messages,
         )
 
     async def list_conversations(

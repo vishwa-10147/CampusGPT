@@ -65,6 +65,7 @@ class IngestionService:
                     size_bytes=len(scraped.content.encode("utf-8")),
                     uploaded_by=None,  # System ingestion
                     status="processing",
+                    visibility="public",
                 )
 
                 # Process content: chunk + embed

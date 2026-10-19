@@ -48,6 +48,15 @@ class Document(Base, UUIDMixin, TimestampMixin):
         index=True,
         nullable=False,
     )  # pending, processing, ready, failed
+    # "public": searchable by everyone (website pages, admin uploads)
+    # "private": searchable only by the uploader
+    visibility: Mapped[str] = mapped_column(
+        String(20),
+        default="private",
+        server_default="private",
+        index=True,
+        nullable=False,
+    )
     completed_at: Mapped[Optional[datetime]] = mapped_column(
         DateTime(timezone=True),
         nullable=True,

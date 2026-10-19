@@ -10,7 +10,7 @@ interface AuthContextType {
   isLoading: boolean
   isAuthenticated: boolean
   login: (email: string, password: string) => Promise<void>
-  register: (data: { email: string; password: string; password_confirm: string; full_name: string }) => Promise<void>
+  register: (data: { email: string; password: string; password_confirm: string; full_name: string }) => Promise<{ verificationRequired: boolean }>
   logout: () => Promise<void>
   refreshUser: () => Promise<void>
 }
@@ -42,10 +42,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   const register = async (data: { email: string; password: string; password_confirm: string; full_name: string }) => {
-    await authApi.register(data)
+    const { data: created } = await authApi.register(data)
+    if (!created.email_verified) {
+      // The account can't sign in until the emailed link is used
+      return { verificationRequired: true }
+    }
     // Registration doesn't set auth cookies, so sign in right away
     await authApi.login({ email: data.email, password: data.password })
     await refreshUser()
+    return { verificationRequired: false }
   }
 
   const logout = async () => {

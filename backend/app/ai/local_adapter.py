@@ -87,6 +87,8 @@ class LocalLLMProvider(LLMProvider):
             "messages": [{"role": m.role, "content": m.content} for m in messages],
             "temperature": temperature,
             "stream": True,
+            # Ask for a final usage chunk so token counts are recorded
+            "stream_options": {"include_usage": True},
         }
         if max_tokens:
             payload["max_tokens"] = max_tokens

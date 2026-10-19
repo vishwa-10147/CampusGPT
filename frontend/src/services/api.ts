@@ -2,9 +2,12 @@
 // CampusGPT Frontend — API Client
 // ==============================================================================
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios'
-import type { ApiError, ConversationListResponse, DocumentListResponse } from '../types'
+import type { ApiError, ConversationListResponse, DocumentListResponse, User } from '../types'
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+
+// Pages that work signed out; an expired session must not redirect away from them
+const PUBLIC_PATHS = ['/login', '/register', '/verify-email']
 
 export const api = axios.create({
   baseURL: `${API_BASE_URL}/api/v1`,
@@ -38,7 +41,7 @@ api.interceptors.response.use(
         return api(originalRequest)
       } catch {
         // Refresh failed, redirect to login
-        if (!['/login', '/register'].includes(window.location.pathname)) {
+        if (!PUBLIC_PATHS.includes(window.location.pathname)) {
           window.location.href = '/login'
         }
       }
@@ -64,6 +67,12 @@ export const authApi = {
 
   refresh: () =>
     api.post('/auth/refresh'),
+
+  verifyEmail: (token: string) =>
+    api.post<User>('/auth/verify-email', { token }),
+
+  resendVerification: (email: string) =>
+    api.post('/auth/resend-verification', { email }),
 }
 
 // Conversation API
@@ -147,9 +156,11 @@ export const messageApi = {
 
 // Document API
 export const documentApi = {
-  upload: (file: File, onProgress?: (progress: number) => void) => {
+  upload: (file: File, options: { shareWithEveryone?: boolean; onProgress?: (progress: number) => void } = {}) => {
+    const { shareWithEveryone = false, onProgress } = options
     const formData = new FormData()
     formData.append('file', file)
+    formData.append('share_with_everyone', String(shareWithEveryone))
 
     return api.post('/documents/upload', formData, {
       headers: { 'Content-Type': 'multipart/form-data' },

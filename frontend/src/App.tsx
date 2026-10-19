@@ -13,6 +13,7 @@ const Chat = lazy(() => import('./pages/Chat').then(m => ({ default: m.Chat })))
 const History = lazy(() => import('./pages/History').then(m => ({ default: m.History })))
 const Documents = lazy(() => import('./pages/Documents').then(m => ({ default: m.Documents })))
 const Settings = lazy(() => import('./pages/Settings').then(m => ({ default: m.Settings })))
+const VerifyEmail = lazy(() => import('./pages/VerifyEmail').then(m => ({ default: m.VerifyEmail })))
 const Admin = lazy(() => import('./pages/Admin').then(m => ({ default: m.Admin })))
 
 // Loading fallback
@@ -88,6 +89,9 @@ const App = () => {
             </PublicRoute>
           }
         />
+
+        {/* Reachable signed in or out: the link arrives by email */}
+        <Route path="/verify-email" element={<VerifyEmail />} />
 
         {/* Protected routes (each page renders its own MainLayout) */}
         <Route path="/chat" element={<ProtectedRoute><Chat /></ProtectedRoute>} />

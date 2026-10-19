@@ -1,11 +1,11 @@
 // ==============================================================================
 // CampusGPT Frontend — Form Components
 // ==============================================================================
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { cn } from '../ui'
 import { Button, Input, Card } from '../ui'
-import { Eye, EyeOff, Loader2 } from 'lucide-react'
+import { Eye, EyeOff, FileText, Loader2, Upload, X } from 'lucide-react'
 
 // Login Form
 interface LoginFormProps {
@@ -222,6 +222,7 @@ interface UploadFormProps {
 export const UploadForm = ({ onUpload, isUploading, progress, error }: UploadFormProps) => {
   const [dragActive, setDragActive] = useState(false)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault()
@@ -251,16 +252,25 @@ export const UploadForm = ({ onUpload, isUploading, progress, error }: UploadFor
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (selectedFile) {
+    if (!selectedFile) return
+    try {
       await onUpload(selectedFile)
+      // Uploaded: clear the form so the same file isn't sent twice
+      setSelectedFile(null)
+      if (fileInputRef.current) fileInputRef.current.value = ''
+    } catch {
+      // Keep the file selected; the page shows the server's error
     }
   }
 
   const allowedTypes = ['application/pdf', 'text/plain', 'text/markdown']
+  const allowedExtensions = ['.pdf', '.txt', '.md', '.markdown']
   const maxSize = 10 * 1024 * 1024 // 10MB
 
   const validateFile = (file: File) => {
-    if (!allowedTypes.includes(file.type)) {
+    // Browsers often report .md files with an empty type, so fall back to the extension
+    const extension = file.name.slice(file.name.lastIndexOf('.')).toLowerCase()
+    if (!allowedTypes.includes(file.type) && !allowedExtensions.includes(extension)) {
       return 'File type not allowed. Please upload PDF, TXT, or MD files.'
     }
     if (file.size > maxSize) {
@@ -285,6 +295,7 @@ export const UploadForm = ({ onUpload, isUploading, progress, error }: UploadFor
           onDrop={handleDrop}
         >
           <input
+            ref={fileInputRef}
             type="file"
             id="file-upload"
             className="hidden"
@@ -294,7 +305,7 @@ export const UploadForm = ({ onUpload, isUploading, progress, error }: UploadFor
           />
           <label htmlFor="file-upload" className="cursor-pointer">
             <div className="mx-auto h-12 w-12 text-neutral-400 mb-4">
-              <Loader2 className="h-full w-full" />
+              <Upload className="h-full w-full" />
             </div>
             <p className="text-lg font-medium text-neutral-900 mb-1">
               Drag & drop a document here, or click to browse
@@ -310,7 +321,9 @@ export const UploadForm = ({ onUpload, isUploading, progress, error }: UploadFor
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="h-10 w-10 rounded-lg bg-primary-100 flex items-center justify-center">
-                  <Loader2 className="h-5 w-5 text-primary-600" />
+                  {isUploading
+                    ? <Loader2 className="h-5 w-5 text-primary-600 animate-spin" />
+                    : <FileText className="h-5 w-5 text-primary-600" />}
                 </div>
                 <div>
                   <p className="font-medium text-neutral-900 truncate max-w-[200px]">{selectedFile.name}</p>
@@ -363,6 +376,3 @@ export const UploadForm = ({ onUpload, isUploading, progress, error }: UploadFor
     </Card>
   )
 }
-
-// Missing imports
-import { X } from 'lucide-react'

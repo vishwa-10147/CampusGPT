@@ -148,11 +148,11 @@ cp .env.example .env
 # Option A: Docker (recommended)
 docker compose up -d ollama
 docker exec campusgpt-ollama ollama pull nomic-embed-text
-docker exec campusgpt-ollama ollama pull llama3.1:8b
+docker exec campusgpt-ollama ollama pull llama3.2:3b
 
 # Option B: Host installation
 # ollama pull nomic-embed-text
-# ollama pull llama3.1:8b
+# ollama pull llama3.2:3b
 ```
 
 ### 3. Start All Services
@@ -176,22 +176,37 @@ docker compose logs -f backend
 
 ---
 
-### 5. Ingest Institutional Data (MGIT Example)
+### 5. Load Institutional Data (MGIT Example)
 
 ```bash
-# Scrape MGIT website + ingest into RAG
-docker exec campusgpt-backend python /app/scripts/ingest_mgit.py
+# Load the already-scraped pages in backend/data/scraped/mgit (no website access).
+# Keeps the newest copy of each page, strips site menus/sidebars, skips pages
+# already loaded. Add --replace to re-ingest everything.
+docker compose exec backend python scripts/load_scraped_mgit.py
 
-# Expected output: ~96 pages scraped, ~96 documents, 300+ chunks
+# Or scrape the website again and ingest the result
+docker compose exec backend python scripts/ingest_mgit.py
 ```
+
+Website pages are **public**: every user's answers can use them.
 
 ---
 
 ### 6. Create Account & Start Chatting
 
-1. Open http://localhost:5173
-2. Click **"Sign up"** → create account
-3. Start chatting with CampusGPT!
+1. Open http://localhost:5173 and click **Sign up**
+2. Confirm your email. In development (`EMAIL_BACKEND=console`) the link is printed in the backend log:
+   `docker compose logs backend | grep verify-email`
+3. Sign in and start chatting
+
+### 7. Make Yourself an Admin
+
+```bash
+docker compose exec backend python scripts/make_admin.py you@college.edu
+```
+
+Admins see every document, can delete any document, and can tick **Share with everyone**
+when uploading to add a file to the campus knowledge base.
 
 ---
 
@@ -222,7 +237,7 @@ REFRESH_TOKEN_EXPIRE_DAYS=7
 # Local (Ollama) — recommended for privacy & cost
 LLM_PROVIDER=local
 LOCAL_LLM_BASE_URL=http://ollama:11434
-LOCAL_LLM_MODEL=llama3.1:8b
+LOCAL_LLM_MODEL=llama3.2:3b
 LOCAL_EMBEDDING_MODEL=nomic-embed-text
 
 # OpenAI (cloud)
@@ -263,15 +278,19 @@ MGIT_ALLOWED_PATHS=/,/about,/admissions,/academics,/departments,/placements,/not
 
 | Feature | Status | Description |
 |---------|--------|-------------|
-| **Authentication** | ✅ | JWT (HttpOnly cookies), Argon2id, refresh tokens |
+| **Authentication** | ✅ | JWT (HttpOnly cookies), Argon2id, rotating refresh tokens |
+| **Email Verification** | ✅ | Signed 24h links; console output in dev, SMTP in production |
+| **Rate Limiting** | ✅ | Sign-in per account and per IP, chat and uploads per IP (429 + Retry-After) |
 | **Chat Interface** | ✅ | Conversation history, streaming (SSE), citations |
 | **Document Upload** | ✅ | PDF, TXT, MD with automatic processing |
+| **Document Privacy** | ✅ | Uploads are private to their owner; website pages and admin-shared files are public |
 | **RAG Pipeline** | ✅ | pgvector similarity search, HNSW index |
 | **Source Citations** | ✅ | Page/chunk references on every answer |
 | **Web Scraping** | ✅ | MGIT scraper with robots.txt compliance |
 | **Document Ingestion** | ✅ | Scrape → Chunk → Embed → Store pipeline |
 | **Vector Search** | ✅ | pgvector HNSW index, cosine similarity |
 | **Admin Dashboard** | ✅ | Document management, ingestion monitoring |
+| **Migrations** | ✅ | Alembic owns the schema; applied automatically on container start |
 | **Responsive UI** | ✅ | Mobile, tablet, desktop |
 
 ---
@@ -284,7 +303,9 @@ Once running: **http://localhost:8000/docs** (Swagger UI)
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| `POST` | `/api/v1/auth/register` | Register user |
+| `POST` | `/api/v1/auth/register` | Register user (emails a confirmation link) |
+| `POST` | `/api/v1/auth/verify-email` | Confirm email with the link's token |
+| `POST` | `/api/v1/auth/resend-verification` | Send a new confirmation link |
 | `POST` | `/api/v1/auth/login` | Login |
 | `POST` | `/api/v1/auth/logout` | Logout |
 | `GET` | `/api/v1/auth/me` | Current user |
@@ -292,22 +313,26 @@ Once running: **http://localhost:8000/docs** (Swagger UI)
 | `POST` | `/api/v1/conversations` | Create conversation |
 | `GET` | `/api/v1/conversations/{id}` | Get conversation + messages |
 | `POST` | `/api/v1/conversations/{id}/messages` | Send message (SSE stream) |
-| `POST` | `/api/v1/documents/upload` | Upload document |
+| `POST` | `/api/v1/documents/upload` | Upload document (admins: `share_with_everyone`) |
+| `POST` | `/api/v1/documents/{id}/reprocess` | Re-chunk and re-embed a document |
 | `GET` | `/api/v1/documents` | List documents |
-| `POST` | `/api/v1/admin/ingest/mgit` | Trigger MGIT ingestion |
+| `POST` | `/api/v1/documents/ingest/mgit` | Scrape and ingest MGIT (admin) |
 
 ---
 
 ## Testing
 
 ```bash
-# Backend tests
+# Backend tests (use their own campusgpt_test database; dev data is never touched)
 docker compose exec backend pytest -v
 docker compose exec backend pytest --cov=app --cov-report=html
 
-# Frontend tests
+# Frontend unit tests
 docker compose exec frontend npm run test
-docker compose exec frontend npm run test:e2e
+
+# Browser end-to-end tests against the running app. Needs one verified student
+# account and one admin account; the frontend image includes Chromium.
+docker compose exec   -e E2E_CHROMIUM_PATH=/usr/bin/chromium -e E2E_API_HOST=backend:8000   -e E2E_USER_EMAIL=student@college.edu -e E2E_USER_PASSWORD=...   -e E2E_ADMIN_EMAIL=admin@college.edu -e E2E_ADMIN_PASSWORD=...   frontend npm run test:e2e
 
 # Linting
 docker compose exec backend ruff check .
@@ -319,12 +344,19 @@ docker compose exec frontend npm run lint
 
 ## Database Management
 
+The schema is managed by Alembic (`backend/migrations/versions`). The backend container runs
+`scripts/migrate.py` before starting, which applies pending migrations. Databases created before
+migrations existed are recognised and stamped at the baseline first.
+
 ```bash
-# Create migration
+# Create a migration after changing a model, then review the generated file
 docker compose exec backend alembic revision --autogenerate -m "description"
 
-# Apply migrations
-docker compose exec backend alembic upgrade head
+# Apply migrations (also happens automatically on start)
+docker compose exec backend python scripts/migrate.py
+
+# Check the models and the database agree
+docker compose exec backend alembic check
 
 # Rollback
 docker compose exec backend alembic downgrade -1

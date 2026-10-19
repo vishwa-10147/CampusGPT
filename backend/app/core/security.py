@@ -65,6 +65,13 @@ def create_refresh_token(subject: UUID, expires_delta: Optional[timedelta] = Non
     return jwt.encode(to_encode, settings.secret_key, algorithm=settings.jwt_algorithm)
 
 
+def create_email_verification_token(subject: UUID) -> str:
+    """Create a signed, expiring token that proves control of the account's email."""
+    expire = datetime.now(timezone.utc) + timedelta(hours=settings.email_verification_expire_hours)
+    to_encode = {"sub": str(subject), "exp": expire, "type": "verify_email"}
+    return jwt.encode(to_encode, settings.secret_key, algorithm=settings.jwt_algorithm)
+
+
 def decode_token(token: str) -> Optional[dict]:
     """Decode and validate a JWT token. Returns payload or None if invalid."""
     try:

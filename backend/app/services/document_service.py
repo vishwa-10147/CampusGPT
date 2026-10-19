@@ -63,6 +63,7 @@ class DocumentService:
         filename: str,
         content_type: str,
         size: int,
+        visibility: str = "private",
     ) -> DocumentUploadResponse:
         """Upload a document and create processing job."""
         # Validate
@@ -84,6 +85,7 @@ class DocumentService:
             size_bytes=size,
             uploaded_by=user_id,
             status="pending",
+            visibility=visibility,
         )
 
         # Create ingestion job; commit now so the background processor can see it

@@ -3,7 +3,7 @@
 # ==============================================================================
 from uuid import UUID
 
-from sqlalchemy import Boolean, String
+from sqlalchemy import Boolean, String, false as sa_false
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.models.base import Base, TimestampMixin, UUIDMixin
@@ -36,6 +36,12 @@ class User(Base, UUIDMixin, TimestampMixin):
     is_admin: Mapped[bool] = mapped_column(
         Boolean,
         default=False,
+        nullable=False,
+    )
+    email_verified: Mapped[bool] = mapped_column(
+        Boolean,
+        default=False,
+        server_default=sa_false(),
         nullable=False,
     )
 

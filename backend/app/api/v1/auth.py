@@ -1,14 +1,23 @@
 # ==============================================================================
 # CampusGPT Backend — Auth API Routes
 # ==============================================================================
-from fastapi import APIRouter, Depends, Response, HTTPException, status, Cookie
+from fastapi import APIRouter, BackgroundTasks, Depends, Response, HTTPException, status, Cookie
 from fastapi.security import HTTPBearer
 
 from app.core.config import settings
 from app.core.rate_limit import auth_rate_limit
 from app.api.deps import get_auth_service, get_current_user_id, get_current_user
-from app.schemas.auth import RegisterRequest, LoginRequest, TokenResponse, UserResponse
-from app.services.auth_service import AuthService
+from app.schemas.auth import (
+    RegisterRequest,
+    LoginRequest,
+    TokenResponse,
+    UserResponse,
+    VerifyEmailRequest,
+    ResendVerificationRequest,
+    MessageResponse,
+)
+from app.services.auth_service import AuthService, EmailNotVerifiedError
+from app.services.email_service import send_verification_email
 from app.models.user import User
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
@@ -47,14 +56,18 @@ def set_auth_cookies(response: Response, access_token: str, refresh_token: str) 
 )
 async def register(
     data: RegisterRequest,
+    background_tasks: BackgroundTasks,
     auth_service: AuthService = Depends(get_auth_service),
 ):
-    """Register a new user."""
+    """Register a new user; unverified accounts are emailed a confirmation link."""
     try:
         user = await auth_service.register(data)
-        return user
     except ValueError as e:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+
+    if not user.email_verified:
+        background_tasks.add_task(send_verification_email, user.id, user.email)
+    return user
 
 
 @router.post("/login", response_model=TokenResponse, dependencies=[Depends(auth_rate_limit)])
@@ -66,11 +79,42 @@ async def login(
     """Login and set auth cookies."""
     try:
         token_response, refresh_token = await auth_service.login(data)
+    except EmailNotVerifiedError as e:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=str(e))
     except ValueError as e:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=str(e))
 
     set_auth_cookies(response, token_response.access_token, refresh_token)
     return token_response
+
+
+@router.post("/verify-email", response_model=UserResponse)
+async def verify_email(
+    data: VerifyEmailRequest,
+    auth_service: AuthService = Depends(get_auth_service),
+):
+    """Confirm an email address using the token from the emailed link."""
+    try:
+        return await auth_service.verify_email(data.token)
+    except ValueError as e:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+
+
+@router.post(
+    "/resend-verification",
+    response_model=MessageResponse,
+    dependencies=[Depends(auth_rate_limit)],
+)
+async def resend_verification(
+    data: ResendVerificationRequest,
+    background_tasks: BackgroundTasks,
+    auth_service: AuthService = Depends(get_auth_service),
+):
+    """Send a new verification link. Always answers the same way, so it can't reveal which emails exist."""
+    user = await auth_service.get_unverified_user(data.email)
+    if user:
+        background_tasks.add_task(send_verification_email, user.id, user.email)
+    return MessageResponse(message="If that account needs confirming, a new link is on its way.")
 
 
 @router.post("/logout")

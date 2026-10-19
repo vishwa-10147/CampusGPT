@@ -7,6 +7,7 @@ import { documentApi } from '../services/api'
 import { MainLayout } from '../components/layout'
 import { Button, Card, Badge, Spinner } from '../components/ui'
 import { UploadForm } from '../components/forms'
+import { useAuth } from '../features/auth/AuthContext'
 import { FileText, Trash2, RefreshCw, Loader2, Eye, AlertCircle, CheckCircle, Clock } from 'lucide-react'
 import { formatDistanceToNow } from 'date-fns'
 
@@ -21,6 +22,8 @@ export const Documents = () => {
   const queryClient = useQueryClient()
   const [page, setPage] = useState(1)
   const [statusFilter, setStatusFilter] = useState<string | null>(null)
+  const { user } = useAuth()
+  const [shareWithEveryone, setShareWithEveryone] = useState(false)
 
   const { data, isLoading } = useQuery({
     queryKey: ['documents', page, statusFilter],
@@ -31,7 +34,7 @@ export const Documents = () => {
   })
 
   const uploadMutation = useMutation({
-    mutationFn: (file: File) => documentApi.upload(file),
+    mutationFn: (file: File) => documentApi.upload(file, { shareWithEveryone }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['documents'] })
     },
@@ -69,12 +72,33 @@ export const Documents = () => {
         <Card>
           <div className="p-6 border-b border-neutral-200">
             <h2 className="text-lg font-semibold text-neutral-900 mb-2">Upload New Document</h2>
-            <p className="text-sm text-neutral-600">Supported: PDF, TXT, MD • Max 10MB</p>
+            <p className="text-sm text-neutral-600">
+              Supported: PDF, TXT, MD • Max 10MB • Only you can search your uploads
+            </p>
           </div>
-          <div className="p-6">
+          <div className="p-6 space-y-4">
+            {user?.is_admin && (
+              <label className="flex items-start gap-2 text-sm text-neutral-700">
+                <input
+                  type="checkbox"
+                  className="mt-0.5"
+                  checked={shareWithEveryone}
+                  onChange={e => setShareWithEveryone(e.target.checked)}
+                />
+                <span>
+                  Share with everyone: add this document to the campus knowledge base so every user's
+                  answers can use it.
+                </span>
+              </label>
+            )}
             <UploadForm
               onUpload={async (file) => { await uploadMutation.mutateAsync(file) }}
               isUploading={uploadMutation.isPending}
+              error={
+                uploadMutation.error
+                  ? (uploadMutation.error as any).response?.data?.detail || 'Upload failed. Please try again.'
+                  : undefined
+              }
             />
           </div>
         </Card>
@@ -133,6 +157,9 @@ export const Documents = () => {
                           <Badge variant={statusConfig.color}>
                             <Icon className="h-3 w-3 mr-1 inline" />
                             {statusConfig.label}
+                          </Badge>
+                          <Badge variant={doc.visibility === 'public' ? 'primary' : 'neutral'}>
+                            {doc.visibility === 'public' ? 'Shared' : 'Private'}
                           </Badge>
                         </div>
                         <div className="flex items-center gap-4 text-sm text-neutral-500">

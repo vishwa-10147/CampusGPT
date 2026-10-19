@@ -45,9 +45,20 @@ class UserResponse(BaseModel):
     full_name: str
     is_active: bool
     is_admin: bool
+    email_verified: bool
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class VerifyEmailRequest(BaseModel):
+    """Email verification (token from the emailed link)."""
+    token: str
+
+
+class ResendVerificationRequest(BaseModel):
+    """Request a new verification email."""
+    email: EmailStr
 
 
 class MessageResponse(BaseModel):

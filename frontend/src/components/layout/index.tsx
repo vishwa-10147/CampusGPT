@@ -2,7 +2,7 @@
 // CampusGPT Frontend — Layout Components
 // ==============================================================================
 import React, { useState } from 'react'
-import { NavLink, useLocation } from 'react-router-dom'
+import { Link, NavLink, useLocation } from 'react-router-dom'
 import { cn } from '../ui'
 import { Button, Avatar, Separator } from '../ui'
 import { useAuth } from '../../features/auth/AuthContext'
@@ -184,3 +184,19 @@ export const MainLayout = ({ children }: MainLayoutProps) => {
     </div>
   )
 }
+// Centered card page used by sign-in, sign-up and email confirmation
+export const AuthPageShell = ({ children }: { children: React.ReactNode }) => (
+  <div className="min-h-screen flex items-center justify-center bg-neutral-50 px-4 py-12">
+    <div className="w-full">
+      <div className="flex justify-center mb-8">
+        <Link to="/" className="flex items-center gap-2" aria-label="CampusGPT Home">
+          <div className="h-10 w-10 rounded-xl bg-primary-600 flex items-center justify-center">
+            <Bot className="h-6 w-6 text-white" />
+          </div>
+          <span className="text-xl font-bold text-neutral-900">CampusGPT</span>
+        </Link>
+      </div>
+      {children}
+    </div>
+  </div>
+)

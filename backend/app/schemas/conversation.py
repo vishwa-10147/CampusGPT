@@ -7,6 +7,8 @@ from uuid import UUID
 
 from pydantic import BaseModel, Field, ConfigDict
 
+from app.schemas.message import MessageResponse
+
 
 class ConversationCreate(BaseModel):
     """Create conversation request."""
@@ -30,6 +32,11 @@ class ConversationResponse(BaseModel):
     last_message_preview: Optional[str] = None
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class ConversationDetailResponse(ConversationResponse):
+    """A single conversation with its messages, oldest first."""
+    messages: List[MessageResponse] = []
 
 
 class ConversationListResponse(BaseModel):

@@ -23,6 +23,7 @@ from sqlalchemy import select
 
 from app.core.database import async_session_maker, close_db, init_db
 from app.ingestion.base_scraper import ScrapedDocument
+from app.ingestion.boilerplate import find_boilerplate_lines, strip_boilerplate
 from app.ingestion.ingestion_service import IngestionService, scraped_filename
 from app.models.document import Document
 
@@ -46,11 +47,14 @@ def load_latest_pages(directory: Path) -> list[ScrapedDocument]:
         if current is None or page.get("scraped_at", "") > current.get("scraped_at", ""):
             latest[page["url"]] = page
 
+    # Sidebars and menus repeat on most pages; drop them so chunks hold page content
+    boilerplate = find_boilerplate_lines(page["content"] for page in latest.values())
+
     return [
         ScrapedDocument(
             url=page["url"],
             title=page.get("title") or page["url"],
-            content=page["content"],
+            content=strip_boilerplate(page["content"], boilerplate, page.get("title", "")),
             scraped_at=datetime.fromisoformat(page["scraped_at"]) if page.get("scraped_at") else datetime.utcnow(),
             source_type=page.get("source_type", "web"),
         )
@@ -59,7 +63,7 @@ def load_latest_pages(directory: Path) -> list[ScrapedDocument]:
 
 
 async def main(replace: bool) -> None:
-    pages = load_latest_pages(SCRAPED_DIR)
+    pages = [page for page in load_latest_pages(SCRAPED_DIR) if page.content.strip()]
     print(f"Found {len(pages)} unique pages in {SCRAPED_DIR}")
 
     await init_db()

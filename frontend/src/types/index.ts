@@ -8,6 +8,7 @@ export interface User {
   full_name: string
   is_active: boolean
   is_admin: boolean
+  email_verified: boolean
   created_at: string
 }
 
@@ -54,6 +55,7 @@ export interface Document {
   updated_at: string
   completed_at: string | null
   chunk_count: number
+  visibility: 'public' | 'private'
 }
 
 export interface PaginatedResponse<T> {

@@ -5,11 +5,11 @@ from typing import List, Optional, Sequence
 from uuid import UUID
 from dataclasses import dataclass
 
-from sqlalchemy import select, func
+from sqlalchemy import select, func, or_
 from sqlalchemy.ext.asyncio import AsyncSession
 from pgvector.sqlalchemy import Vector
 
-from app.models.document import DocumentChunk
+from app.models.document import Document, DocumentChunk
 from app.core.config import settings
 
 
@@ -33,9 +33,13 @@ class VectorRetriever:
         top_k: int = None,
         similarity_threshold: float = None,
         document_ids: Optional[List[UUID]] = None,
+        user_id: Optional[UUID] = None,
     ) -> List[RetrievedChunk]:
         """
         Search for similar chunks using cosine similarity.
+
+        With user_id, only public documents and that user's own private
+        documents are searched. Without it, only public documents are.
         
         Args:
             query_embedding: Query vector
@@ -52,8 +56,15 @@ class VectorRetriever:
 
         query = (
             select(DocumentChunk, similarity_expr.label("similarity"))
+            .join(Document, Document.id == DocumentChunk.document_id)
             .where(DocumentChunk.embedding.is_not(None))
+            .where(Document.status == "ready")
         )
+
+        visible = Document.visibility == "public"
+        if user_id is not None:
+            visible = or_(visible, Document.uploaded_by == user_id)
+        query = query.where(visible)
 
         if document_ids:
             query = query.where(DocumentChunk.document_id.in_(document_ids))

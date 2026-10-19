@@ -1,6 +1,7 @@
 # ==============================================================================
 # CampusGPT Backend — Auth Service
 # ==============================================================================
+from typing import Optional
 from uuid import UUID
 from datetime import timedelta
 
@@ -18,6 +19,10 @@ from app.core.config import settings
 from app.repositories.user_repo import UserRepository
 from app.schemas.auth import RegisterRequest, LoginRequest, TokenResponse, UserResponse
 from app.models.user import User
+
+
+class EmailNotVerifiedError(ValueError):
+    """Login refused until the account's email address is confirmed."""
 
 
 class AuthService:
@@ -44,6 +49,7 @@ class AuthService:
             full_name=data.full_name,
             is_active=True,
             is_admin=False,
+            email_verified=not settings.require_email_verification,
         )
 
         return UserResponse.model_validate(user)
@@ -59,6 +65,10 @@ class AuthService:
 
         if not verify_password(data.password, user.password_hash):
             raise ValueError("Invalid credentials")
+
+        # Checked after the password so this can't be used to probe which emails exist
+        if settings.require_email_verification and not user.email_verified:
+            raise EmailNotVerifiedError("Please confirm your email address before signing in")
 
         # Create tokens
         access_token = create_access_token(user.id)
@@ -92,6 +102,28 @@ class AuthService:
             token_type="bearer",
             expires_in=settings.access_token_expire_minutes * 60,
         )
+
+    async def verify_email(self, token: str) -> UserResponse:
+        """Mark the account in a verification token as verified (idempotent)."""
+        user_id = get_token_subject(token, "verify_email")
+        if not user_id:
+            raise ValueError("This verification link is invalid or has expired")
+
+        user = await self.user_repo.get_by_id(user_id)
+        if not user:
+            raise ValueError("This verification link is invalid or has expired")
+
+        if not user.email_verified:
+            user.email_verified = True
+            await self.session.flush()
+        return UserResponse.model_validate(user)
+
+    async def get_unverified_user(self, email: str) -> Optional[User]:
+        """The account to re-send a verification email to, if there is one."""
+        user = await self.user_repo.get_by_email(email)
+        if user and user.is_active and not user.email_verified:
+            return user
+        return None
 
     async def get_current_user(self, access_token: str) -> UserResponse:
         """Get current user from access token."""

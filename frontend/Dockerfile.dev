@@ -3,6 +3,9 @@
 # ==============================================================================
 FROM node:20-alpine
 
+# System Chromium for Playwright e2e tests (Playwright's own builds don't support Alpine)
+RUN apk add --no-cache chromium
+
 # Set working directory
 WORKDIR /app
 
