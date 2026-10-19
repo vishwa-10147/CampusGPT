@@ -333,23 +333,6 @@ docker compose exec db psql -U postgres -d campusgpt
 
 ---
 
-## Production Deployment
-
-### Checklist
-
-- [ ] `APP_ENV=production`
-- [ ] Strong `SECRET_KEY` (32+ random chars)
-- [ ] Secure `POSTGRES_PASSWORD`
-- [ ] HTTPS/TLS termination (nginx/Traefik)
-- [ ] Resource limits on containers
-- [ ] Database backup strategy
-- [ ] Logging aggregation (Loki/ELK)
-- [ ] Monitoring (Prometheus + Grafana)
-- [ ] Rate limiting with Redis
-- [ ] Secrets management (Vault/AWS Secrets Manager)
-
----
-
 ## Roadmap
 
 ### Phase 2: Knowledge Platform
