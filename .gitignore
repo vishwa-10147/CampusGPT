@@ -72,4 +72,4 @@ build/
 **/.env
 
 #Skills
-/.claud-skills
+claude-skills/
