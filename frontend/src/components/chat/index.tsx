@@ -6,7 +6,7 @@ import { marked } from 'marked'
 import DOMPurify from 'dompurify'
 import { cn } from '../ui'
 import { Button, Badge, Spinner, Avatar } from '../ui'
-import { Copy, FileText, ChevronDown, ChevronUp, ExternalLink } from 'lucide-react'
+import { Copy, FileText, ChevronDown, ChevronUp, Bot, MessageSquare } from 'lucide-react'
 import type { Message, SourceCitation } from '../../types'
 import { formatDistanceToNow } from 'date-fns'
 
@@ -37,7 +37,7 @@ export const MessageBubble = ({ message, isStreaming, onCopy, onRetry }: Message
     }
 
     // Render markdown for assistant messages
-    const html = DOMPurify.sanitize(marked.parse(message.content || ''))
+    const html = DOMPurify.sanitize(marked.parse(message.content || '', { async: false }) as string)
     return <div className="prose prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: html }} />
   }
 

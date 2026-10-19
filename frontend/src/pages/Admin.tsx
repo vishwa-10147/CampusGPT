@@ -1,12 +1,12 @@
 // ==============================================================================
 // CampusGPT Frontend — Admin Page
 // ==============================================================================
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { adminApi } from '../services/api'
+import { adminApi, documentApi } from '../services/api'
 import { MainLayout } from '../components/layout'
 import { Card, Button, Badge, Spinner } from '../components/ui'
-import { Users, FileText, Trash2, RefreshCw, Loader2, Search, Eye, AlertCircle, CheckCircle, Clock } from 'lucide-react'
+import { FileText, Trash2, Loader2, Eye, AlertCircle, CheckCircle, Clock } from 'lucide-react'
 import { formatDistanceToNow } from 'date-fns'
 
 const STATUS_CONFIG = {
@@ -23,11 +23,11 @@ export const Admin = () => {
 
   const { data, isLoading } = useQuery({
     queryKey: ['admin-documents', page, statusFilter],
-    queryFn: () => adminApi.documents({ page, page_size: 50, status: statusFilter || undefined }),
+    queryFn: () => adminApi.documents({ page, page_size: 50, status: statusFilter || undefined }).then(r => r.data),
   })
 
   const deleteMutation = useMutation({
-    mutationFn: (id: string) => adminApi.documents({ page: 1, page_size: 1 }), // Would need delete endpoint
+    mutationFn: (id: string) => documentApi.delete(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin-documents'] })
     },
@@ -126,7 +126,11 @@ export const Admin = () => {
         </Card>
 
         {/* Documents Table */}
-        {documents.length === 0 ? (
+        {isLoading ? (
+          <div className="flex justify-center p-12">
+            <Spinner size="lg" />
+          </div>
+        ) : documents.length === 0 ? (
           <Card className="p-12 text-center">
             <FileText className="h-12 w-12 text-neutral-300 mx-auto mb-4" />
             <h3 className="text-lg font-medium text-neutral-900 mb-2">No documents found</h3>
@@ -184,9 +188,8 @@ export const Admin = () => {
                               <Eye className="h-4 w-4" />
                             </Button>
                             <Button
-                              variant="ghost"
-                              size="sm"
                               variant="danger"
+                              size="sm"
                               onClick={() => deleteMutation.mutate(doc.id)}
                               disabled={deleteMutation.isPending}
                               aria-label={`Delete ${doc.original_name}`}

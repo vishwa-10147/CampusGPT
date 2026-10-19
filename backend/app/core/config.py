@@ -67,6 +67,9 @@ class Settings(BaseSettings):
     local_llm_model: Optional[str] = Field(default=None, alias="LOCAL_LLM_MODEL")
     local_embedding_model: Optional[str] = Field(default=None, alias="LOCAL_EMBEDDING_MODEL")
 
+    # Must match the embedding model output (nomic-embed-text: 768, text-embedding-3-small: 1536)
+    embedding_dimension: int = Field(default=768, alias="EMBEDDING_DIMENSION")
+
     # --------------------------------------------------------------------------
     # File Storage
     # --------------------------------------------------------------------------

@@ -4,6 +4,7 @@
 from fastapi import APIRouter, Depends, Response, HTTPException, status, Cookie
 from fastapi.security import HTTPBearer
 
+from app.core.config import settings
 from app.api.deps import get_auth_service, get_current_user_id, get_current_user
 from app.schemas.auth import RegisterRequest, LoginRequest, TokenResponse, UserResponse
 from app.services.auth_service import AuthService
@@ -14,10 +15,27 @@ router = APIRouter(prefix="/auth", tags=["Authentication"])
 # Cookie settings
 COOKIE_SETTINGS = {
     "httponly": True,
-    "secure": False,  # Set to True in production with HTTPS
+    "secure": not settings.is_development,
     "samesite": "lax",
-    "max_age": 7 * 24 * 60 * 60,  # 7 days
 }
+REFRESH_COOKIE_PATH = "/api/v1/auth"
+
+
+def set_auth_cookies(response: Response, access_token: str, refresh_token: str) -> None:
+    """Set the access cookie (all routes) and the refresh cookie (auth routes only)."""
+    response.set_cookie(
+        key="access_token",
+        value=access_token,
+        max_age=settings.access_token_expire_minutes * 60,
+        **COOKIE_SETTINGS,
+    )
+    response.set_cookie(
+        key="refresh_token",
+        value=refresh_token,
+        max_age=settings.refresh_token_expire_days * 24 * 60 * 60,
+        path=REFRESH_COOKIE_PATH,
+        **COOKIE_SETTINGS,
+    )
 
 
 @router.post("/register", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
@@ -41,27 +59,12 @@ async def login(
 ):
     """Login and set auth cookies."""
     try:
-        token_response = await auth_service.login(data)
-
-        # Set refresh token in HttpOnly cookie
-        # Note: In production, generate a separate refresh token and store in cookie
-        # For simplicity, we're using the access token in cookie too
-        response.set_cookie(
-            key="access_token",
-            value=token_response.access_token,
-            **COOKIE_SETTINGS,
-        )
-
-        # Set a shorter-lived access token cookie for JS access if needed
-        response.set_cookie(
-            key="refresh_token",
-            value=token_response.access_token,  # In production, use separate refresh token
-            **COOKIE_SETTINGS,
-        )
-
-        return token_response
+        token_response, refresh_token = await auth_service.login(data)
     except ValueError as e:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=str(e))
+
+    set_auth_cookies(response, token_response.access_token, refresh_token)
+    return token_response
 
 
 @router.post("/logout")
@@ -70,8 +73,8 @@ async def logout(
     auth_service: AuthService = Depends(get_auth_service),
 ):
     """Logout and clear cookies."""
-    response.delete_cookie("access_token", httponly=True, secure=False, samesite="lax")
-    response.delete_cookie("refresh_token", httponly=True, secure=False, samesite="lax")
+    response.delete_cookie("access_token", **COOKIE_SETTINGS)
+    response.delete_cookie("refresh_token", path=REFRESH_COOKIE_PATH, **COOKIE_SETTINGS)
     return {"message": "Logged out successfully"}
 
 
@@ -97,20 +100,9 @@ async def refresh_token(
         )
 
     try:
-        token_response = await auth_service.refresh_token(refresh_token)
-
-        # Update cookies
-        response.set_cookie(
-            key="access_token",
-            value=token_response.access_token,
-            **COOKIE_SETTINGS,
-        )
-        response.set_cookie(
-            key="refresh_token",
-            value=token_response.access_token,
-            **COOKIE_SETTINGS,
-        )
-
-        return token_response
+        token_response, new_refresh_token = await auth_service.refresh_token(refresh_token)
     except ValueError as e:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=str(e))
+
+    set_auth_cookies(response, token_response.access_token, new_refresh_token)
+    return token_response

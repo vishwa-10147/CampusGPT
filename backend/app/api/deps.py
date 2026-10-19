@@ -30,7 +30,7 @@ async def get_current_user_id(
             detail="Not authenticated",
         )
 
-    user_id = get_token_subject(access_token)
+    user_id = get_token_subject(access_token, "access")
     if not user_id:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -74,7 +74,7 @@ async def get_optional_user(
     """Get current user if authenticated, otherwise None."""
     if not access_token:
         return None
-    user_id = get_token_subject(access_token)
+    user_id = get_token_subject(access_token, "access")
     if not user_id:
         return None
     user_repo = UserRepository(session)

@@ -9,6 +9,7 @@ from sqlalchemy import BigInteger, DateTime, ForeignKey, Integer, String, Text, 
 from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
+from app.core.config import settings
 from app.models.base import Base, TimestampMixin, UUIDMixin
 
 # Import Vector type from pgvector
@@ -90,7 +91,7 @@ class DocumentChunk(Base, UUIDMixin, TimestampMixin):
         nullable=False,
     )
     embedding: Mapped[Optional[List[float]]] = mapped_column(
-        Vector(1536),  # OpenAI text-embedding-3-small dimension
+        Vector(settings.embedding_dimension),
         nullable=True,
     )
     chunk_index: Mapped[int] = mapped_column(

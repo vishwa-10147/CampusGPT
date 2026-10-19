@@ -215,13 +215,13 @@ export const Avatar = React.forwardRef<HTMLDivElement, AvatarProps>(
 
     if (src) {
       return (
-        <img
+        <div
           ref={ref}
-          src={src}
-          alt={name || 'Avatar'}
-          className={cn('rounded-full object-cover', sizeClasses[size], className)}
+          className={cn('rounded-full overflow-hidden', sizeClasses[size], className)}
           {...props}
-        />
+        >
+          <img src={src} alt={name || 'Avatar'} className="h-full w-full object-cover" />
+        </div>
       )
     }
 

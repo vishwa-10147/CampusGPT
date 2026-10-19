@@ -27,6 +27,9 @@ class LocalLLMProvider(LLMProvider):
         api_key: str = "not-needed",
     ):
         self._base_url = (base_url or settings.local_llm_base_url or "").rstrip("/")
+        # Chat uses the OpenAI-compatible API, which Ollama serves under /v1
+        if self._base_url and not self._base_url.endswith("/v1"):
+            self._base_url += "/v1"
         self._default_model = default_model or settings.local_llm_model
 
         if not self._base_url:
@@ -134,7 +137,8 @@ class LocalEmbeddingProvider(EmbeddingProvider):
         base_url: Optional[str] = None,
         default_model: Optional[str] = None,
     ):
-        self._base_url = (base_url or settings.local_llm_base_url or "").rstrip("/")
+        # Embeddings use Ollama's native /api routes, so drop any /v1 suffix
+        self._base_url = (base_url or settings.local_llm_base_url or "").rstrip("/").removesuffix("/v1")
         self._default_model = default_model or settings.local_embedding_model
 
         if not self._base_url:

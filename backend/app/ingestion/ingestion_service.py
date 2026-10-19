@@ -70,11 +70,13 @@ class IngestionService:
                     await self.doc_repo.update_status(doc.id, "failed")
                     doc.status = "failed"
 
+                # Commit per document so a long run keeps finished work
+                await self.session.commit()
                 created_docs.append(doc)
 
             except Exception as e:
                 print(f"Error ingesting {scraped.url}: {e}")
-                # Document might not exist yet, skip
+                await self.session.rollback()
 
         return created_docs
 
@@ -128,7 +130,7 @@ class IngestionService:
                         embedding=embedding,
                         chunk_index=i,
                         page_number=None,  # Web content doesn't have pages
-                        metadata={
+                        chunk_metadata={
                             **text_chunk.metadata,
                             "char_count": len(text_chunk.content),
                             "source_type": "web",

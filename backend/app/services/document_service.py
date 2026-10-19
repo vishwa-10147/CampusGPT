@@ -86,8 +86,9 @@ class DocumentService:
             status="pending",
         )
 
-        # Create ingestion job
+        # Create ingestion job; commit now so the background processor can see it
         await self.job_repo.create_job(document.id)
+        await self.session.commit()
 
         return DocumentUploadResponse.model_validate(document)
 
@@ -192,6 +193,23 @@ class DocumentService:
         await self.doc_repo.delete(document_id)
 
         return True
+
+    async def reset_for_reprocessing(
+        self, document_id: UUID, user_id: UUID, is_admin: bool = False
+    ) -> Optional[DocumentResponse]:
+        """Drop existing chunks and mark the document pending again."""
+        document = await self.doc_repo.get(document_id)
+        if not document or (not is_admin and document.uploaded_by != user_id):
+            return None
+        if not (self.upload_dir / document.filename).exists():
+            raise ValueError("Original file is not stored, so it can't be reprocessed")
+
+        await self.chunk_repo.delete_document_chunks(document_id)
+        await self.doc_repo.update_status(document_id, "pending")
+        if not await self.job_repo.get_by_document(document_id):
+            await self.job_repo.create_job(document_id)
+        await self.session.commit()
+        return await self.get_document(document_id, user_id, is_admin)
 
     def get_storage_path(self, document: Document) -> Path:
         """Get the filesystem path for a document."""

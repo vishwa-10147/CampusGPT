@@ -1,8 +1,8 @@
 {
-  "scraped_at": "2026-10-19T10:21:33.062599",
+  "scraped_at": "2026-10-19T10:52:02.711259",
   "source": "https://mgit.ac.in",
-  "total_documents": 96,
-  "saved_count": 96,
+  "total_documents": 91,
+  "saved_count": 91,
   "documents": [
     {
       "index": 0,
@@ -12,51 +12,51 @@
     },
     {
       "index": 1,
-      "url": "https://mgit.ac.in/news/mgit-becomes-a-life-corporate-member-of-the-indian-society-for-non-destructive-testing-isnt/",
-      "title": "MGIT Becomes a Life Corporate Member of the Indian Society for Non Destructive Testing (ISNT) - MGIT",
-      "filename": "0001_news_mgit-becomes-a-life-corporate-member-of-the-indian-society-for-non-destructive-testing-isnt.json"
+      "url": "https://mgit.ac.in/news/mgit-civil-engineering-students-win-second-prize-in-civiq-quiz-at-infranova26-vasavi-college-of-engineering/",
+      "title": "MGIT Civil Engineering Students Win Second Prize in CIVIQ Quiz at INFRANOVA'26, Vasavi College of Engineering - MGIT",
+      "filename": "0001_news_mgit-civil-engineering-students-win-second-prize-in-civiq-quiz-at-infranova26-vasavi-college-of.json"
     },
     {
       "index": 2,
-      "url": "https://mgit.ac.in/news/",
-      "title": "All News",
-      "filename": "0002_news.json"
+      "url": "https://mgit.ac.in/announcements/",
+      "title": "All Announcements",
+      "filename": "0002_announcements.json"
     },
     {
       "index": 3,
-      "url": "https://mgit.ac.in/events/a-one-day-national-level-workshop-on-materials-characterisation-tools-xrdsem-and-simulation-through-dft-in-hybrid-mode/",
-      "title": "A one-day National Level workshop on “Materials Characterisation tools (XRD&SEM) and simulation through DFT” in hybrid mode - MGIT",
-      "filename": "0003_events_a-one-day-national-level-workshop-on-materials-characterisation-tools-xrdsem-and-simulation-t.json"
+      "url": "https://mgit.ac.in/news/",
+      "title": "All News",
+      "filename": "0003_news.json"
     },
     {
       "index": 4,
-      "url": "https://mgit.ac.in/news/mgit-students-win-second-place-in-health-tech-at-hackx-2026-with-eeg-powered-mindwave/",
-      "title": "MGIT Students Win Second Place in Health Tech at HACKX 2026 with EEG-Powered “Mindwave” - MGIT",
-      "filename": "0004_news_mgit-students-win-second-place-in-health-tech-at-hackx-2026-with-eeg-powered-mindwave.json"
+      "url": "https://mgit.ac.in/events/ignito-26-national-level-technical-symposium-in-mechanical-engineering/",
+      "title": "“IGNITO’ 26” NATIONAL LEVEL TECHNICAL SYMPOSIUM IN MECHANICAL ENGINEERING - MGIT",
+      "filename": "0004_events_ignito-26-national-level-technical-symposium-in-mechanical-engineering.json"
     },
     {
       "index": 5,
-      "url": "https://mgit.ac.in/events/yukti-2026-national-level-technical-symposium/",
-      "title": "“YUKTI-2026” National Level Technical Symposium - MGIT",
-      "filename": "0005_events_yukti-2026-national-level-technical-symposium.json"
+      "url": "https://mgit.ac.in/iic/",
+      "title": "Institution's Innovation Council",
+      "filename": "0005_iic.json"
     },
     {
       "index": 6,
-      "url": "https://mgit.ac.in/events/magistech-2026/",
-      "title": "MAGISTECH 2026",
-      "filename": "0006_events_magistech-2026.json"
+      "url": "https://mgit.ac.in/events/five-day-futureskills-prime-2-0-bootcamp-on-internet-of-things-iot/",
+      "title": "Five-Day FutureSkills Prime 2.0 Bootcamp on Internet of Things (IoT) - MGIT",
+      "filename": "0006_events_five-day-futureskills-prime-2-0-bootcamp-on-internet-of-things-iot.json"
     },
     {
       "index": 7,
-      "url": "https://mgit.ac.in/news/mgit-inaugurates-magistech-2026-a-national-level-technical-symposium-uniting-the-tech-fests-of-all-11-departments/",
-      "title": "MGIT Inaugurates Magistech-2026, a National-Level Technical Symposium Uniting the Tech Fests of All 11 Departments - MGIT",
-      "filename": "0007_news_mgit-inaugurates-magistech-2026-a-national-level-technical-symposium-uniting-the-tech-fests-of-.json"
+      "url": "https://mgit.ac.in/events/first-year-b-tech-student-orientation-programme-2026-27/",
+      "title": "Orientation Schedule",
+      "filename": "0007_events_first-year-b-tech-student-orientation-programme-2026-27.json"
     },
     {
       "index": 8,
-      "url": "https://mgit.ac.in/events/",
-      "title": "All Upcoming Events",
-      "filename": "0008_events.json"
+      "url": "https://mgit.ac.in/events/technovation26-national-level-technical-symposium-in-mechatronics-2/",
+      "title": "TECHNOVATION’26 National-Level Technical Symposium in Mechatronics - MGIT",
+      "filename": "0008_events_technovation26-national-level-technical-symposium-in-mechatronics-2.json"
     },
     {
       "index": 9,
@@ -66,117 +66,117 @@
     },
     {
       "index": 10,
-      "url": "https://mgit.ac.in/events/technovation26-national-level-technical-symposium-in-mechatronics-2/",
-      "title": "TECHNOVATION’26 National-Level Technical Symposium in Mechatronics - MGIT",
-      "filename": "0010_events_technovation26-national-level-technical-symposium-in-mechatronics-2.json"
+      "url": "https://mgit.ac.in/events/metallon-multiverse-2026/",
+      "title": "METALLON MULTIVERSE 2026 - MGIT",
+      "filename": "0010_events_metallon-multiverse-2026.json"
     },
     {
       "index": 11,
-      "url": "https://mgit.ac.in/events/techkriti-2026-national-level-technical-symposium/",
-      "title": "TECHKRITI-2026 National Level Technical Symposium - MGIT",
-      "filename": "0011_events_techkriti-2026-national-level-technical-symposium.json"
+      "url": "https://mgit.ac.in/events/potenzia-2026-2/",
+      "title": "POTENZIA 2026 - MGIT",
+      "filename": "0011_events_potenzia-2026-2.json"
     },
     {
       "index": 12,
-      "url": "https://mgit.ac.in/events/metallon-multiverse-2026/",
-      "title": "METALLON MULTIVERSE 2026 - MGIT",
-      "filename": "0012_events_metallon-multiverse-2026.json"
+      "url": "https://mgit.ac.in/events/a-one-day-national-level-workshop-on-materials-characterisation-tools-xrdsem-and-simulation-through-dft-in-hybrid-mode/",
+      "title": "A one-day National Level workshop on “Materials Characterisation tools (XRD&SEM) and simulation through DFT” in hybrid mode - MGIT",
+      "filename": "0012_events_a-one-day-national-level-workshop-on-materials-characterisation-tools-xrdsem-and-simulation-t.json"
     },
     {
       "index": 13,
-      "url": "https://mgit.ac.in/events/aicte-atal-fdp-on-responsible-ai-governance-for-large-language-models-16-21-nov-2026/",
-      "title": "AICTE-ATAL FDP on Responsible AI Governance for Large Language Models | 16–21 Nov 2026 - MGIT",
-      "filename": "0013_events_aicte-atal-fdp-on-responsible-ai-governance-for-large-language-models-16-21-nov-2026.json"
+      "url": "https://mgit.ac.in/news/metallon-multiverse-2026-mme-department-hosts-national-level-students-technical-event-at-mgit/",
+      "title": "Metallon Multiverse-2026: MME Department Hosts National-Level Students' Technical Event at MGIT - MGIT",
+      "filename": "0013_news_metallon-multiverse-2026-mme-department-hosts-national-level-students-technical-event-at-mgit.json"
     },
     {
       "index": 14,
-      "url": "https://mgit.ac.in/events/2-day-drone-technology-workshop/",
-      "title": "2 Day Drone Technology Workshop - MGIT",
-      "filename": "0014_events_2-day-drone-technology-workshop.json"
+      "url": "https://mgit.ac.in/news/mgit-becomes-a-life-corporate-member-of-the-indian-society-for-non-destructive-testing-isnt/",
+      "title": "MGIT Becomes a Life Corporate Member of the Indian Society for Non Destructive Testing (ISNT) - MGIT",
+      "filename": "0014_news_mgit-becomes-a-life-corporate-member-of-the-indian-society-for-non-destructive-testing-isnt.json"
     },
     {
       "index": 15,
-      "url": "https://mgit.ac.in/events/potenzia-2026-2/",
-      "title": "POTENZIA 2026 - MGIT",
-      "filename": "0015_events_potenzia-2026-2.json"
+      "url": "https://mgit.ac.in/events/qiskit-fall-fest-mgit-2026/",
+      "title": "Qiskit Fall Fest MGIT 2026",
+      "filename": "0015_events_qiskit-fall-fest-mgit-2026.json"
     },
     {
       "index": 16,
-      "url": "https://mgit.ac.in/events/first-year-b-tech-student-orientation-programme-2026-27/",
-      "title": "Orientation Schedule",
-      "filename": "0016_events_first-year-b-tech-student-orientation-programme-2026-27.json"
+      "url": "https://mgit.ac.in/news/mgit-inaugurates-magistech-2026-a-national-level-technical-symposium-uniting-the-tech-fests-of-all-11-departments/",
+      "title": "MGIT Inaugurates Magistech-2026, a National-Level Technical Symposium Uniting the Tech Fests of All 11 Departments - MGIT",
+      "filename": "0016_news_mgit-inaugurates-magistech-2026-a-national-level-technical-symposium-uniting-the-tech-fests-of-.json"
     },
     {
       "index": 17,
-      "url": "https://mgit.ac.in/events/ignito-26-national-level-technical-symposium-in-mechanical-engineering/",
-      "title": "“IGNITO’ 26” NATIONAL LEVEL TECHNICAL SYMPOSIUM IN MECHANICAL ENGINEERING - MGIT",
-      "filename": "0017_events_ignito-26-national-level-technical-symposium-in-mechanical-engineering.json"
+      "url": "https://mgit.ac.in/events/",
+      "title": "All Upcoming Events",
+      "filename": "0017_events.json"
     },
     {
       "index": 18,
-      "url": "https://mgit.ac.in/news/mgit-civil-engineering-students-win-second-prize-in-civiq-quiz-at-infranova26-vasavi-college-of-engineering/",
-      "title": "MGIT Civil Engineering Students Win Second Prize in CIVIQ Quiz at INFRANOVA'26, Vasavi College of Engineering - MGIT",
-      "filename": "0018_news_mgit-civil-engineering-students-win-second-prize-in-civiq-quiz-at-infranova26-vasavi-college-of.json"
+      "url": "https://mgit.ac.in/news/mgit-celebrates-bathukamma-with-traditional-grandeur-and-festive-spirit/",
+      "title": "MGIT Celebrates Bathukamma with Traditional Grandeur and Festive Spirit - MGIT",
+      "filename": "0018_news_mgit-celebrates-bathukamma-with-traditional-grandeur-and-festive-spirit.json"
     },
     {
       "index": 19,
-      "url": "https://mgit.ac.in/events/mgit-internal-hackathon-smart-india-hackathon-sih-2026/",
-      "title": "MGIT Internal Hackathon – Smart India Hackathon (SIH) 2026 - MGIT",
-      "filename": "0019_events_mgit-internal-hackathon-smart-india-hackathon-sih-2026.json"
+      "url": "https://mgit.ac.in/news/mgit-students-win-second-place-in-health-tech-at-hackx-2026-with-eeg-powered-mindwave/",
+      "title": "MGIT Students Win Second Place in Health Tech at HACKX 2026 with EEG-Powered “Mindwave” - MGIT",
+      "filename": "0019_news_mgit-students-win-second-place-in-health-tech-at-hackx-2026-with-eeg-powered-mindwave.json"
     },
     {
       "index": 20,
-      "url": "https://mgit.ac.in/events/cinfra-2026-national-level-technical-symposium-%c2%b7-design-digital-build-intelligent/",
-      "title": "CINFRA 2026 National Level Technical Symposium · Design Digital & Build Intelligent - MGIT",
-      "filename": "0020_events_cinfra-2026-national-level-technical-symposium-_c2_b7-design-digital-build-intelligent.json"
+      "url": "https://mgit.ac.in/events/yukti-2026-national-level-technical-symposium/",
+      "title": "“YUKTI-2026” National Level Technical Symposium - MGIT",
+      "filename": "0020_events_yukti-2026-national-level-technical-symposium.json"
     },
     {
       "index": 21,
-      "url": "https://mgit.ac.in/announcements/",
-      "title": "All Announcements",
-      "filename": "0021_announcements.json"
+      "url": "https://mgit.ac.in/events/magistech-2026/",
+      "title": "MAGISTECH 2026",
+      "filename": "0021_events_magistech-2026.json"
     },
     {
       "index": 22,
-      "url": "https://mgit.ac.in/NEP/",
-      "title": "NEP SAARTHIGuiding the Reform.",
-      "filename": "0022_NEP.json"
+      "url": "https://mgit.ac.in/circulars/",
+      "title": "Circulars - MGIT",
+      "filename": "0022_circulars.json"
     },
     {
       "index": 23,
-      "url": "https://mgit.ac.in/news/metallon-multiverse-2026-mme-department-hosts-national-level-students-technical-event-at-mgit/",
-      "title": "Metallon Multiverse-2026: MME Department Hosts National-Level Students' Technical Event at MGIT - MGIT",
-      "filename": "0023_news_metallon-multiverse-2026-mme-department-hosts-national-level-students-technical-event-at-mgit.json"
+      "url": "https://mgit.ac.in/events/2-day-drone-technology-workshop/",
+      "title": "2 Day Drone Technology Workshop - MGIT",
+      "filename": "0023_events_2-day-drone-technology-workshop.json"
     },
     {
       "index": 24,
-      "url": "https://mgit.ac.in/news/mgit-celebrates-bathukamma-with-traditional-grandeur-and-festive-spirit/",
-      "title": "MGIT Celebrates Bathukamma with Traditional Grandeur and Festive Spirit - MGIT",
-      "filename": "0024_news_mgit-celebrates-bathukamma-with-traditional-grandeur-and-festive-spirit.json"
+      "url": "https://mgit.ac.in/events/techkriti-2026-national-level-technical-symposium/",
+      "title": "TECHKRITI-2026 National Level Technical Symposium - MGIT",
+      "filename": "0024_events_techkriti-2026-national-level-technical-symposium.json"
     },
     {
       "index": 25,
-      "url": "https://mgit.ac.in/events/qiskit-fall-fest-mgit-2026/",
-      "title": "Qiskit Fall Fest MGIT 2026",
-      "filename": "0025_events_qiskit-fall-fest-mgit-2026.json"
+      "url": "https://mgit.ac.in/events/mgit-internal-hackathon-smart-india-hackathon-sih-2026/",
+      "title": "MGIT Internal Hackathon – Smart India Hackathon (SIH) 2026 - MGIT",
+      "filename": "0025_events_mgit-internal-hackathon-smart-india-hackathon-sih-2026.json"
     },
     {
       "index": 26,
-      "url": "https://mgit.ac.in/events/five-day-futureskills-prime-2-0-bootcamp-on-internet-of-things-iot/",
-      "title": "Five-Day FutureSkills Prime 2.0 Bootcamp on Internet of Things (IoT) - MGIT",
-      "filename": "0026_events_five-day-futureskills-prime-2-0-bootcamp-on-internet-of-things-iot.json"
+      "url": "https://mgit.ac.in/NEP/",
+      "title": "NEP SAARTHIGuiding the Reform.",
+      "filename": "0026_NEP.json"
     },
     {
       "index": 27,
-      "url": "https://mgit.ac.in/circulars/",
-      "title": "Circulars - MGIT",
-      "filename": "0027_circulars.json"
+      "url": "https://mgit.ac.in/events/aicte-atal-fdp-on-responsible-ai-governance-for-large-language-models-16-21-nov-2026/",
+      "title": "AICTE-ATAL FDP on Responsible AI Governance for Large Language Models | 16–21 Nov 2026 - MGIT",
+      "filename": "0027_events_aicte-atal-fdp-on-responsible-ai-governance-for-large-language-models-16-21-nov-2026.json"
     },
     {
       "index": 28,
-      "url": "https://mgit.ac.in/iic/",
-      "title": "Institution's Innovation Council",
-      "filename": "0028_iic.json"
+      "url": "https://mgit.ac.in/events/cinfra-2026-national-level-technical-symposium-%c2%b7-design-digital-build-intelligent/",
+      "title": "CINFRA 2026 National Level Technical Symposium · Design Digital & Build Intelligent - MGIT",
+      "filename": "0028_events_cinfra-2026-national-level-technical-symposium-_c2_b7-design-digital-build-intelligent.json"
     },
     {
       "index": 29,
@@ -192,393 +192,363 @@
     },
     {
       "index": 31,
-      "url": "https://mgit.ac.in/news/training-placements-cell-mgit-organized-the-industry-institute-conclave-iic-on-10-may-2023-at-institute-auditorium/",
-      "title": "Training & Placements Cell, MGIT organized the Industry Institute Conclave (IIC) on 10 May 2023 at Institute Auditorium. - MGIT",
-      "filename": "0031_news_training-placements-cell-mgit-organized-the-industry-institute-conclave-iic-on-10-may-2023-at-i.json"
+      "url": "https://mgit.ac.in/announcements/one-time-chance-b-tech-cbt-end-exam-eligible-students-list-2023-exam-fee-notification/",
+      "title": "ONE TIME-CHANCE B.TECH CBT & END EXAM ELIGIBLE STUDENTS LIST 2023 & EXAM FEE NOTIFICATION - MGIT",
+      "filename": "0031_announcements_one-time-chance-b-tech-cbt-end-exam-eligible-students-list-2023-exam-fee-notification.json"
     },
     {
       "index": 32,
-      "url": "https://mgit.ac.in/news/mgit-successfully-organizes-icaspace-2025-a-global-gathering-of-experts-in-signal-processing-and-communication-engineering/",
-      "title": "MGIT Successfully Organizes ICASPACE-2025: A Global Gathering of Experts in Signal Processing and Communication Engineering - MGIT",
-      "filename": "0032_news_mgit-successfully-organizes-icaspace-2025-a-global-gathering-of-experts-in-signal-processing-an.json"
+      "url": "https://mgit.ac.in/announcements/revised-circular…-i-sem-ay2021-22/revised-circular-of-recounting-revaluation-i-sem-ay2021-22",
+      "title": "Revised Circular of Recounting/Revaluation I Sem (AY:2021-22) - MGIT",
+      "filename": "0032_announcements_revised-circular_-i-sem-ay2021-22_revised-circular-of-recounting-revaluation-i-sem-ay2.json"
     },
     {
       "index": 33,
-      "url": "https://mgit.ac.in/news/glimpses-of-the-beauty-grandeur-of-orientation-program-2022-at-mgit/",
-      "title": "Glimpses of the beauty & grandeur of Orientation Program 2022 at MGIT - MGIT",
-      "filename": "0033_news_glimpses-of-the-beauty-grandeur-of-orientation-program-2022-at-mgit.json"
+      "url": "https://mgit.ac.in/announcements/one-time-chance-eligible-students-list-b-tech-cbt-b-tech-m-tech-end-exam-may-june-2025/",
+      "title": "ONE TIME-CHANCE ELIGIBLE STUDENTS LIST - B.TECH CBT & B.TECH, M.TECH END EXAM MAY-JUNE 2025 - MGIT",
+      "filename": "0033_announcements_one-time-chance-eligible-students-list-b-tech-cbt-b-tech-m-tech-end-exam-may-june-2025.json"
     },
     {
       "index": 34,
-      "url": "https://mgit.ac.in/news/expert-lecture-on-business-model-canvas-and-business-model-fit-organized-at-mgit/",
-      "title": "Expert Lecture on “Business Model Canvas and Business Model Fit” Organized at MGIT - MGIT",
-      "filename": "0034_news_expert-lecture-on-business-model-canvas-and-business-model-fit-organized-at-mgit.json"
+      "url": "https://mgit.ac.in/recruitment/",
+      "title": "Recruitment",
+      "filename": "0034_recruitment.json"
     },
     {
       "index": 35,
-      "url": "https://mgit.ac.in/news/mgit-eee-student-participation-and-research-presentation-at-icps-2025-iit-hyderabad/",
-      "title": "MGIT–EEE Student Participation and Research Presentation at ICPS-2025, IIT Hyderabad - MGIT",
-      "filename": "0035_news_mgit-eee-student-participation-and-research-presentation-at-icps-2025-iit-hyderabad.json"
+      "url": "https://mgit.ac.in/announcements/jntuh-iii-b-tech-i-ii-sem-suppli-exam-and-minor-degree-exam-notification-nov-dec-2025/",
+      "title": "JNTUH - III B.Tech I & II Sem Suppli Exam and Minor Degree Exam Notification Nov-Dec 2025 - MGIT",
+      "filename": "0035_announcements_jntuh-iii-b-tech-i-ii-sem-suppli-exam-and-minor-degree-exam-notification-nov-dec-2025.json"
     },
     {
       "index": 36,
-      "url": "https://mgit.ac.in/news/torry-harris-campus-placement-drive/",
-      "title": "Torry Harris Campus Placement Drive - MGIT",
-      "filename": "0036_news_torry-harris-campus-placement-drive.json"
+      "url": "https://mgit.ac.in/announcements/regal-rexnord-drive/",
+      "title": "Regal Rexnord Drive - MGIT",
+      "filename": "0036_announcements_regal-rexnord-drive.json"
     },
     {
       "index": 37,
-      "url": "https://mgit.ac.in/news/world-environment-day/",
-      "title": "World Environment Day - MGIT",
-      "filename": "0037_news_world-environment-day.json"
+      "url": "https://mgit.ac.in/news/%f0%9f%8e%89-mgit-students-clinch-first-place-at-krithoathon-3-0/",
+      "title": "🎉 MGIT Students Clinch First Place at Krithoathon 3.0! - MGIT",
+      "filename": "0037_news__f0_9f_8e_89-mgit-students-clinch-first-place-at-krithoathon-3-0.json"
     },
     {
       "index": 38,
-      "url": "https://mgit.ac.in/news/hearty-congratulations-to-mr-k-bharat-reddy-alumnus-2014-graduate-mmt-mgit-on-being-conferred-with-the-inae-young-engineer-award-2025/",
-      "title": "Hearty congratulations to Mr. K. Bharat Reddy (Alumnus, 2014 graduate MMT, MGIT) on being conferred with the INAE Young Engineer Award-2025 - MGIT",
-      "filename": "0038_news_hearty-congratulations-to-mr-k-bharat-reddy-alumnus-2014-graduate-mmt-mgit-on-being-conferred-w.json"
+      "url": "https://mgit.ac.in/news/conquerors-of-smart-india-hackathon-2022/",
+      "title": "Conquerors of Smart India Hackathon 2022 - MGIT",
+      "filename": "0038_news_conquerors-of-smart-india-hackathon-2022.json"
     },
     {
       "index": 39,
-      "url": "https://mgit.ac.in/news/mgit-organizes-seminar-on-semiconductors-and-sensors-for-global-well-being-on-national-science-day/",
-      "title": "MGIT Organizes Seminar on \"Semiconductors and Sensors for Global Well-being\" on National Science Day - MGIT",
-      "filename": "0039_news_mgit-organizes-seminar-on-semiconductors-and-sensors-for-global-well-being-on-national-science-.json"
+      "url": "https://mgit.ac.in/news/mgit-faculty-collaborates-with-drdl-scientists-to-explore-research-opportunities-in-defense-and-space/",
+      "title": "MGIT Faculty Collaborates with DRDL Scientists to Explore Research Opportunities in Defense and Space - MGIT",
+      "filename": "0039_news_mgit-faculty-collaborates-with-drdl-scientists-to-explore-research-opportunities-in-defense-and.json"
     },
     {
       "index": 40,
-      "url": "https://mgit.ac.in/news/fdp-on-prolog-programming/",
-      "title": "FDP on Prolog Programming - MGIT",
-      "filename": "0040_news_fdp-on-prolog-programming.json"
+      "url": "https://mgit.ac.in/news/mgit-hosts-expert-lecture-on-achieving-problem-solution-fit-to-promote-innovation/",
+      "title": "MGIT Hosts Expert Lecture on “Achieving Problem Solution Fit” to Promote Innovation - MGIT",
+      "filename": "0040_news_mgit-hosts-expert-lecture-on-achieving-problem-solution-fit-to-promote-innovation.json"
     },
     {
       "index": 41,
-      "url": "https://mgit.ac.in/news/one-day-workshop-on-materials-characterisation-tools-xrd-sem-and-simulation-through-dft-held-at-mgit/",
-      "title": "One-Day Workshop on Materials Characterisation Tools (XRD & SEM) and Simulation Through DFT Held at MGIT - MGIT",
-      "filename": "0041_news_one-day-workshop-on-materials-characterisation-tools-xrd-sem-and-simulation-through-dft-held-at.json"
+      "url": "https://mgit.ac.in/news/techdemocracy-selects/",
+      "title": "TechDemocracy Selects - MGIT",
+      "filename": "0041_news_techdemocracy-selects.json"
     },
     {
       "index": 42,
-      "url": "https://mgit.ac.in/news/mgit-it-students-win-first-prize-at-ieee-rampage-v2-6-hackathon/",
-      "title": "MGIT IT Students Win First Prize at IEEE RAMpage v2.6 Hackathon - MGIT",
-      "filename": "0042_news_mgit-it-students-win-first-prize-at-ieee-rampage-v2-6-hackathon.json"
+      "url": "https://mgit.ac.in/news/one-day-workshop-on-quantum-computing-basics-for-csb-it-students/",
+      "title": "One-Day Workshop on Quantum Computing Basics for CSB & IT Students - MGIT",
+      "filename": "0042_news_one-day-workshop-on-quantum-computing-basics-for-csb-it-students.json"
     },
     {
       "index": 43,
-      "url": "https://mgit.ac.in/news/blood-donation-%f0%9f%a9%b8-camp-on-10-01-2023/",
-      "title": "Blood Donation 🩸 Camp on 10/01/2023 - MGIT",
-      "filename": "0043_news_blood-donation-_f0_9f_a9_b8-camp-on-10-01-2023.json"
+      "url": "https://mgit.ac.in/news/training-and-interactive-session-for-the-intermediate-students-of-jawahar-navodaya-vidyalaya-vattem-branch-on-the-significance-of-core-engineering-stream/",
+      "title": "Training and Interactive Session for the Intermediate Students of Jawahar Navodaya Vidyalaya, Vattem Branch on the significance of Core Engineering Stream - MGIT",
+      "filename": "0043_news_training-and-interactive-session-for-the-intermediate-students-of-jawahar-navodaya-vidyalaya-va.json"
     },
     {
       "index": 44,
-      "url": "https://mgit.ac.in/news/mgit-students-excel-in-intel-unnathi-summer-internship-2025/",
-      "title": "MGIT Students Excel in Intel Unnathi Summer Internship 2025 - MGIT",
-      "filename": "0044_news_mgit-students-excel-in-intel-unnathi-summer-internship-2025.json"
+      "url": "https://mgit.ac.in/news/successful-one-day-innovation-and-entrepreneurship-outreach-program-in-schools-organized-by-institutions-innovation-council-iic-of-mgit-and-entrepreneurship-development-cell-edc/",
+      "title": "\"Successful One Day Innovation and Entrepreneurship Outreach Program in Schools Organized by Institution's Innovation Council (IIC) of MGIT and Entrepreneurship Development Cell (EDC)\" - MGIT",
+      "filename": "0044_news_successful-one-day-innovation-and-entrepreneurship-outreach-program-in-schools-organized-by-ins.json"
     },
     {
       "index": 45,
-      "url": "https://mgit.ac.in/news/industrial-visit-to-jsw-rmc-plant-basuragadi-village-gandimaisamma-hyderabad-on-9th-january-2024/",
-      "title": "Industrial visit to JSW RMC Plant, Basuragadi village, Gandimaisamma, Hyderabad on 9th January 2024 - MGIT",
-      "filename": "0045_news_industrial-visit-to-jsw-rmc-plant-basuragadi-village-gandimaisamma-hyderabad-on-9th-january-202.json"
+      "url": "https://mgit.ac.in/news/bathukamma-festival-celebrations/",
+      "title": "Bathukamma Festival Celebrations - MGIT",
+      "filename": "0045_news_bathukamma-festival-celebrations.json"
     },
     {
       "index": 46,
-      "url": "https://mgit.ac.in/news/mgit-conducts-five-day-futureskills-prime-2-0-bootcamp-on-iot-with-nielit-calicut/",
-      "title": "MGIT Conducts Five-Day FutureSkills Prime 2.0 Bootcamp on IoT with NIELIT Calicut - MGIT",
-      "filename": "0046_news_mgit-conducts-five-day-futureskills-prime-2-0-bootcamp-on-iot-with-nielit-calicut.json"
+      "url": "https://mgit.ac.in/news/mgit-students-visit-national-remote-sensing-centre-for-first-hand-exposure-to-satellite-and-meteorological-applications/",
+      "title": "MGIT Students Visit National Remote Sensing Centre for First-Hand Exposure to Satellite and Meteorological Applications - MGIT",
+      "filename": "0046_news_mgit-students-visit-national-remote-sensing-centre-for-first-hand-exposure-to-satellite-and-met.json"
     },
     {
       "index": 47,
-      "url": "https://mgit.ac.in/news/electroforge-innovations-mgits-rising-stars-win-rs-100000-at-founders-fest-2023/",
-      "title": "ElectroForge Innovations: MGIT's Rising Stars Win Rs 1,00,000 at Founders Fest 2023! - MGIT",
-      "filename": "0047_news_electroforge-innovations-mgits-rising-stars-win-rs-100000-at-founders-fest-2023.json"
+      "url": "https://mgit.ac.in/news/strengthening-research-collaboration-women-faculty-from-mech-mct-explore-phd-opportunities-and-funding-at-iith-on-30th-april-2024/",
+      "title": "Strengthening Research Collaboration: Women Faculty from Mech/MCT Explore PhD Opportunities and Funding at IITH on 30th April 2024 - MGIT",
+      "filename": "0047_news_strengthening-research-collaboration-women-faculty-from-mech-mct-explore-phd-opportunities-and-.json"
     },
     {
       "index": 48,
-      "url": "https://mgit.ac.in/news/expert-talk-on-education-4-0-embracing-artificial-intelligence-in-education/",
-      "title": "Expert Talk on Education 4.0: Embracing Artificial Intelligence in Education - MGIT",
-      "filename": "0048_news_expert-talk-on-education-4-0-embracing-artificial-intelligence-in-education.json"
+      "url": "https://mgit.ac.in/news/run-for-unity-was-organized-at-mgit-on-the-occasion-of-rashtriya-ekta-diwas-2022-aiming-at-togetherness-among-people/",
+      "title": "Run for Unity was organized at MGIT on the occasion of Rashtriya Ekta Diwas 2022 aiming at togetherness among people… - MGIT",
+      "filename": "0048_news_run-for-unity-was-organized-at-mgit-on-the-occasion-of-rashtriya-ekta-diwas-2022-aiming-at-toge.json"
     },
     {
       "index": 49,
-      "url": "https://mgit.ac.in/news/mgits-eee-department-takes-learning-beyond-the-classroom-with-an-industrial-visit-to-the-nuclear-fuel-complex-on-may-13-2023/",
-      "title": "MGIT's EEE Department Takes Learning Beyond the Classroom with an Industrial Visit to the Nuclear Fuel Complex on May 13, 2023! - MGIT",
-      "filename": "0049_news_mgits-eee-department-takes-learning-beyond-the-classroom-with-an-industrial-visit-to-the-nuclea.json"
+      "url": "https://mgit.ac.in/news/mgit-organizes-seminar-on-digital-wellness-to-promote-healthy-technology-usage-among-students/",
+      "title": "MGIT Organizes Seminar on “Digital Wellness” to Promote Healthy Technology Usage Among Students - MGIT",
+      "filename": "0049_news_mgit-organizes-seminar-on-digital-wellness-to-promote-healthy-technology-usage-among-students.json"
     },
     {
       "index": 50,
-      "url": "https://mgit.ac.in/news/annual-alumni-reunion-meet-2022/",
-      "title": "Annual Alumni Reunion Meet-2022 - MGIT",
-      "filename": "0050_news_annual-alumni-reunion-meet-2022.json"
+      "url": "https://mgit.ac.in/news/higher-education-opportunities-in-the-united-states-on-17-10-2022/",
+      "title": "Higher Education Opportunities in the United States on 17/10/2022. - MGIT",
+      "filename": "0050_news_higher-education-opportunities-in-the-united-states-on-17-10-2022.json"
     },
     {
       "index": 51,
-      "url": "https://mgit.ac.in/news/mgit-students-and-faculty-conduct-household-survey-in-adopted-village-under-unnat-bharat-abhiyan-scheme/",
-      "title": "MGIT Students and Faculty Conduct Household Survey in Adopted Village Under Unnat Bharat Abhiyan Scheme - MGIT",
-      "filename": "0051_news_mgit-students-and-faculty-conduct-household-survey-in-adopted-village-under-unnat-bharat-abhiya.json"
+      "url": "https://mgit.ac.in/news/different-ways-of-selecting-the-best-engineering-colleges/",
+      "title": "Different ways of selecting the best engineering colleges - MGIT",
+      "filename": "0051_news_different-ways-of-selecting-the-best-engineering-colleges.json"
     },
     {
       "index": 52,
-      "url": "https://mgit.ac.in/news/mgit-eee-students-secure-first-prize-at-csi-ai-100k-project-expo/",
-      "title": "MGIT EEE Students Secure First Prize at CSI AI 100K Project Expo - MGIT",
-      "filename": "0052_news_mgit-eee-students-secure-first-prize-at-csi-ai-100k-project-expo.json"
+      "url": "https://mgit.ac.in/news/mgit-teams-selected-for-the-grand-finale-of-smart-india-hackathon-sih-2025/",
+      "title": "MGIT Teams Selected for the Grand Finale of Smart India Hackathon (SIH) 2025",
+      "filename": "0052_news_mgit-teams-selected-for-the-grand-finale-of-smart-india-hackathon-sih-2025.json"
     },
     {
       "index": 53,
-      "url": "https://mgit.ac.in/news/expert-talk-on-ipr-basics-for-innovation-and-entrepreneurs-organized-at-mgit/",
-      "title": "Expert Talk on “IPR Basics for Innovation and Entrepreneurs” Organized at MGIT - MGIT",
-      "filename": "0053_news_expert-talk-on-ipr-basics-for-innovation-and-entrepreneurs-organized-at-mgit.json"
+      "url": "https://mgit.ac.in/news/mgit-career-development-cell-organizes-workshop-on-mental-wellness-and-soft-skills/",
+      "title": "MGIT Career Development Cell Organizes Workshop on Mental Wellness and Soft Skills - MGIT",
+      "filename": "0053_news_mgit-career-development-cell-organizes-workshop-on-mental-wellness-and-soft-skills.json"
     },
     {
       "index": 54,
-      "url": "https://mgit.ac.in/news/mgit-hosts-seminar-on-mental-health-and-well-being/",
-      "title": "MGIT Hosts Seminar on Mental Health and Well-being - MGIT",
-      "filename": "0054_news_mgit-hosts-seminar-on-mental-health-and-well-being.json"
+      "url": "https://mgit.ac.in/news/mgit-conducts-one-week-workshop-on-from-data-to-insights-big-data-visualization/",
+      "title": "MGIT Conducts One-Week Workshop on “From Data to Insights: Big Data & Visualization” - MGIT",
+      "filename": "0054_news_mgit-conducts-one-week-workshop-on-from-data-to-insights-big-data-visualization.json"
     },
     {
       "index": 55,
-      "url": "https://mgit.ac.in/news/workshop-on-gender-sensitization-in-the-digital-age-understanding-gen-z-perspectives/",
-      "title": "Workshop on Gender Sensitization in the Digital Age: Understanding Gen Z Perspectives - MGIT",
-      "filename": "0055_news_workshop-on-gender-sensitization-in-the-digital-age-understanding-gen-z-perspectives.json"
+      "url": "https://mgit.ac.in/news/mgit-eee-and-iit-hyderabad-ee-strengthen-academic-and-research-collaboration/",
+      "title": "MGIT–EEE and IIT Hyderabad–EE Strengthen Academic and Research Collaboration - MGIT",
+      "filename": "0055_news_mgit-eee-and-iit-hyderabad-ee-strengthen-academic-and-research-collaboration.json"
     },
     {
       "index": 56,
-      "url": "https://mgit.ac.in/news/mgit-students-shine-at-national-level-digital-innovation-challenge/",
-      "title": "MGIT Students Shine at National-Level Digital Innovation Challenge! - MGIT",
-      "filename": "0056_news_mgit-students-shine-at-national-level-digital-innovation-challenge.json"
+      "url": "https://mgit.ac.in/news/mgit-student-ms-medishetty-srujana-honored-with-gold-medal-for-b-tech-civil-engineering-academic-excellence-by-honble-governor-of-telangana-state/",
+      "title": "MGIT Student Ms. Medishetty Srujana Honored with Gold Medal for B.Tech (Civil Engineering) Academic Excellence by Hon'ble Governor of Telangana State - MGIT",
+      "filename": "0056_news_mgit-student-ms-medishetty-srujana-honored-with-gold-medal-for-b-tech-civil-engineering-academi.json"
     },
     {
       "index": 57,
-      "url": "https://mgit.ac.in/news/eight-ug-programs-are-accredited-by-nba-for-three-years/",
-      "title": "Eight UG programs are accredited by NBA for three years - MGIT",
-      "filename": "0057_news_eight-ug-programs-are-accredited-by-nba-for-three-years.json"
+      "url": "https://mgit.ac.in/news/expert-lecture-on-technical-issues-in-the-design-of-electric-vehicles/",
+      "title": "Expert Lecture on “Technical Issues in the Design of Electric Vehicles” - MGIT",
+      "filename": "0057_news_expert-lecture-on-technical-issues-in-the-design-of-electric-vehicles.json"
     },
     {
       "index": 58,
-      "url": "https://mgit.ac.in/news/mgits-cdc-organizes-guest-lecture-on-time-management-and-growth-in-life/",
-      "title": "MGIT's CDC Organizes Guest Lecture on Time Management and Growth in Life - MGIT",
-      "filename": "0058_news_mgits-cdc-organizes-guest-lecture-on-time-management-and-growth-in-life.json"
+      "url": "https://mgit.ac.in/news/mgit-organizes-exclusive-seminar-on-industrial-automation-with-siemens-expert-for-b-tech-students/",
+      "title": "MGIT Organizes Exclusive Seminar on Industrial Automation with Siemens Expert for B.Tech Students - MGIT",
+      "filename": "0058_news_mgit-organizes-exclusive-seminar-on-industrial-automation-with-siemens-expert-for-b-tech-studen.json"
     },
     {
       "index": 59,
-      "url": "https://mgit.ac.in/news/mgit-conducts-successful-workshop-on-entrepreneurship-in-association-with-iic-cdc-and-edc/",
-      "title": "MGIT Conducts Successful Workshop on Entrepreneurship in Association with IIC, CDC, and EDC - MGIT",
-      "filename": "0059_news_mgit-conducts-successful-workshop-on-entrepreneurship-in-association-with-iic-cdc-and-edc.json"
+      "url": "https://mgit.ac.in/news/cpr-awareness-programme/",
+      "title": "CPR awareness Programme - MGIT",
+      "filename": "0059_news_cpr-awareness-programme.json"
     },
     {
       "index": 60,
-      "url": "https://mgit.ac.in/news/successful-one-day-innovation-and-entrepreneurship-outreach-program-in-schools-organized-by-institutions-innovation-council-iic-of-mgit-and-entrepreneurship-development-cell-edc/",
-      "title": "\"Successful One Day Innovation and Entrepreneurship Outreach Program in Schools Organized by Institution's Innovation Council (IIC) of MGIT and Entrepreneurship Development Cell (EDC)\" - MGIT",
-      "filename": "0060_news_successful-one-day-innovation-and-entrepreneurship-outreach-program-in-schools-organized-by-ins.json"
+      "url": "https://mgit.ac.in/news/mgit-participates-in-aishe-survey-to-contribute-to-higher-education-data-collection-in-india/",
+      "title": "\"MGIT Participates in AISHE Survey to Contribute to Higher Education Data Collection in India\" - MGIT",
+      "filename": "0060_news_mgit-participates-in-aishe-survey-to-contribute-to-higher-education-data-collection-in-india.json"
     },
     {
       "index": 61,
-      "url": "https://mgit.ac.in/news/dr-phanirajs-research-paper-published-in-reputed-journal-scripta-materialia/",
-      "title": "Dr. Phaniraj's Research Paper Published in Reputed Journal \"Scripta Materialia\" - MGIT",
-      "filename": "0061_news_dr-phanirajs-research-paper-published-in-reputed-journal-scripta-materialia.json"
+      "url": "https://mgit.ac.in/news/expert-lecture-on-powering-tomorrow-innovation-intelligence-impact-in-the-future-energy-landscape/",
+      "title": "Expert Lecture on “Powering Tomorrow: Innovation, Intelligence & Impact in the Future Energy Landscape” - MGIT",
+      "filename": "0061_news_expert-lecture-on-powering-tomorrow-innovation-intelligence-impact-in-the-future-energy-landsca.json"
     },
     {
       "index": 62,
-      "url": "https://mgit.ac.in/news/faculty-nteraction-with-dr-aloknath-de-samsung-chief-technology-officer/",
-      "title": "Faculty Interaction with Dr. Aloknath De, Samsung Chief Technology Officer(CTO) - MGIT",
-      "filename": "0062_news_faculty-nteraction-with-dr-aloknath-de-samsung-chief-technology-officer.json"
+      "url": "https://mgit.ac.in/news/mgit-ece-department-signs-mou-with-sansi-rf-and-communication-systems-pvt-ltd/",
+      "title": "MGIT ECE Department Signs MoU with SANSI RF and Communication Systems Pvt. Ltd. - MGIT",
+      "filename": "0062_news_mgit-ece-department-signs-mou-with-sansi-rf-and-communication-systems-pvt-ltd.json"
     },
     {
       "index": 63,
-      "url": "https://mgit.ac.in/news/one-day-hands-on-training-on-design-of-ups-health-monitoring-system-at-iith/",
-      "title": "One-Day Hands-on Training on Design of UPS Health Monitoring System at IITH - MGIT",
-      "filename": "0063_news_one-day-hands-on-training-on-design-of-ups-health-monitoring-system-at-iith.json"
+      "url": "https://mgit.ac.in/news/alumni-talk-on-career-development-mme-department/",
+      "title": "Alumni Talk on Career Development – MME Department - MGIT",
+      "filename": "0063_news_alumni-talk-on-career-development-mme-department.json"
     },
     {
       "index": 64,
-      "url": "https://mgit.ac.in/news/parade-towards-success/",
-      "title": "Parade towards Success - MGIT",
-      "filename": "0064_news_parade-towards-success.json"
+      "url": "https://mgit.ac.in/news/special-lecture-on-technical-and-proposal-writing-elevates-research-skills-at-mgit-event-recap-from-august-30-2023/",
+      "title": "Special Lecture on \"Technical and Proposal Writing\" Elevates Research Skills at MGIT: Event Recap from August 30, 2023 - MGIT",
+      "filename": "0064_news_special-lecture-on-technical-and-proposal-writing-elevates-research-skills-at-mgit-event-recap-.json"
     },
     {
       "index": 65,
-      "url": "https://mgit.ac.in/news/materials-scientist-interview-dr-raghunanadan-ummethala-speaks-dominance-of-metallic-materials/",
-      "title": "Materials Scientist Interview-Dr. Raghunanadan Ummethala speaks dominance of metallic materials - MGIT",
-      "filename": "0065_news_materials-scientist-interview-dr-raghunanadan-ummethala-speaks-dominance-of-metallic-materials.json"
+      "url": "https://mgit.ac.in/news/industrial-visit-to-qmax-solutions-pvt-ltd-chennai/",
+      "title": "Industrial Visit to QMax Solutions Pvt. Ltd, Chennai - MGIT",
+      "filename": "0065_news_industrial-visit-to-qmax-solutions-pvt-ltd-chennai.json"
     },
     {
       "index": 66,
-      "url": "https://mgit.ac.in/news/three-days-workshop-on-simulation-of-data-communications-networks-using-ns2-organised-by-department-of-electronics-communications-engineering-in-association-with-task/",
-      "title": "Three Days Workshop on “Simulation of Data Communications & Networks Using NS2” organised by Department of Electronics & Communications Engineering , in association with TASK - MGIT",
-      "filename": "0066_news_three-days-workshop-on-simulation-of-data-communications-networks-using-ns2-organised-by-depart.json"
+      "url": "https://mgit.ac.in/news/electroforge-innovations-mgits-rising-stars-win-rs-100000-at-founders-fest-2023/",
+      "title": "ElectroForge Innovations: MGIT's Rising Stars Win Rs 1,00,000 at Founders Fest 2023! - MGIT",
+      "filename": "0066_news_electroforge-innovations-mgits-rising-stars-win-rs-100000-at-founders-fest-2023.json"
     },
     {
       "index": 67,
-      "url": "https://mgit.ac.in/news/mindtree-selects/",
-      "title": "MindTree Selects",
-      "filename": "0067_news_mindtree-selects.json"
+      "url": "https://mgit.ac.in/news/mahatma-gandhi-institute-of-technology-receives-acm-student-chapter-certificate-of-charter/",
+      "title": "Mahatma Gandhi Institute of Technology Receives ACM Student Chapter Certificate of Charter - MGIT",
+      "filename": "0067_news_mahatma-gandhi-institute-of-technology-receives-acm-student-chapter-certificate-of-charter.json"
     },
     {
       "index": 68,
-      "url": "https://mgit.ac.in/news/mgit-civil-engineering-students-win-first-prize-at-inae-youth-conclave-2025/",
-      "title": "MGIT Civil Engineering Students Win First Prize at INAE Youth Conclave 2025 - MGIT",
-      "filename": "0068_news_mgit-civil-engineering-students-win-first-prize-at-inae-youth-conclave-2025.json"
+      "url": "https://mgit.ac.in/news/industrial-visit-to-interlogicx-embedded-solutions-puducherry/",
+      "title": "Industrial Visit to Interlogicx Embedded Solutions, Puducherry - MGIT",
+      "filename": "0068_news_industrial-visit-to-interlogicx-embedded-solutions-puducherry.json"
     },
     {
       "index": 69,
-      "url": "https://mgit.ac.in/news/international-indentation-workshop-at-university-of-hyderabad/",
-      "title": "International Indentation Workshop at University of Hyderabad - MGIT",
-      "filename": "0069_news_international-indentation-workshop-at-university-of-hyderabad.json"
+      "url": "https://mgit.ac.in/news/eight-ug-programs-are-accredited-by-nba-for-three-years/",
+      "title": "Eight UG programs are accredited by NBA for three years - MGIT",
+      "filename": "0069_news_eight-ug-programs-are-accredited-by-nba-for-three-years.json"
     },
     {
       "index": 70,
-      "url": "https://mgit.ac.in/news/mgit-successfully-hosts-internal-hackathon-for-smart-india-hackathon-2023/",
-      "title": "MGIT Successfully Hosts Internal Hackathon for Smart India Hackathon 2023 - MGIT",
-      "filename": "0070_news_mgit-successfully-hosts-internal-hackathon-for-smart-india-hackathon-2023.json"
+      "url": "https://mgit.ac.in/news/mgit-welcomes-freshman-batch-with-memorable-orientation-program-2024/",
+      "title": "MGIT Welcomes Freshman Batch with Memorable Orientation Program - 2024 - MGIT",
+      "filename": "0070_news_mgit-welcomes-freshman-batch-with-memorable-orientation-program-2024.json"
     },
     {
       "index": 71,
-      "url": "https://mgit.ac.in/news/two-day-industrial-visit-to-m-s-innomet-advanced-materials-p-limited-hyderabad/",
-      "title": "Two Day Industrial Visit to M/s. Innomet Advanced Materials (P) Limited, Hyderabad - MGIT",
-      "filename": "0071_news_two-day-industrial-visit-to-m-s-innomet-advanced-materials-p-limited-hyderabad.json"
+      "url": "https://mgit.ac.in/news/notable-lecture-on-biosensors-development-by-prof-shiv-govind-singh-at-mgit/",
+      "title": "Notable Lecture on Biosensors Development by Prof. Shiv Govind Singh at MGIT - MGIT",
+      "filename": "0071_news_notable-lecture-on-biosensors-development-by-prof-shiv-govind-singh-at-mgit.json"
     },
     {
       "index": 72,
-      "url": "https://mgit.ac.in/news/dbs-selects-3-students-with-an-impressive-offer-of-9-07-lpa/",
-      "title": "DBS Selects 3 Students with an Impressive Offer of 9.07 LPA - MGIT",
-      "filename": "0072_news_dbs-selects-3-students-with-an-impressive-offer-of-9-07-lpa.json"
+      "url": "https://mgit.ac.in/news/celebrating-our-achievement-iste-appreciation-award-winner-2024-for-maximum-student-enrollment/",
+      "title": "Celebrating Our Achievement: ISTE Appreciation Award Winner 2024 for Maximum Student Enrollment - MGIT",
+      "filename": "0072_news_celebrating-our-achievement-iste-appreciation-award-winner-2024-for-maximum-student-enrollment.json"
     },
     {
       "index": 73,
-      "url": "https://mgit.ac.in/news/mgit-participates-in-aishe-survey-to-contribute-to-higher-education-data-collection-in-india/",
-      "title": "\"MGIT Participates in AISHE Survey to Contribute to Higher Education Data Collection in India\" - MGIT",
-      "filename": "0073_news_mgit-participates-in-aishe-survey-to-contribute-to-higher-education-data-collection-in-india.json"
+      "url": "https://mgit.ac.in/news/field-visit-to-rural-technology-parkrtpnirdrajendranagar-on-11th-january-2024/",
+      "title": "Field Visit to Rural Technology Park(RTP),NIRD,Rajendranagar on 11th January 2024 - MGIT",
+      "filename": "0073_news_field-visit-to-rural-technology-parkrtpnirdrajendranagar-on-11th-january-2024.json"
     },
     {
       "index": 74,
-      "url": "https://mgit.ac.in/news/mahatma-gandhi-institute-of-technology-receives-acm-student-chapter-certificate-of-charter/",
-      "title": "Mahatma Gandhi Institute of Technology Receives ACM Student Chapter Certificate of Charter - MGIT",
-      "filename": "0074_news_mahatma-gandhi-institute-of-technology-receives-acm-student-chapter-certificate-of-charter.json"
+      "url": "https://mgit.ac.in/news/dr-m-p-phaniraj-appointed-as-director-of-research-and-development-committee-at-mgit/",
+      "title": "Dr. M. P. Phaniraj appointed as Director of Research and Development Committee at MGIT - MGIT",
+      "filename": "0074_news_dr-m-p-phaniraj-appointed-as-director-of-research-and-development-committee-at-mgit.json"
     },
     {
       "index": 75,
-      "url": "https://mgit.ac.in/news/mgit-alumnus-honored-with-prestigious-international-award/",
-      "title": "MGIT Alumnus Honored with Prestigious International Award - MGIT",
-      "filename": "0075_news_mgit-alumnus-honored-with-prestigious-international-award.json"
+      "url": "https://mgit.ac.in/news/mgit-it-students-win-first-prize-at-ieee-rampage-v2-6-hackathon/",
+      "title": "MGIT IT Students Win First Prize at IEEE RAMpage v2.6 Hackathon - MGIT",
+      "filename": "0075_news_mgit-it-students-win-first-prize-at-ieee-rampage-v2-6-hackathon.json"
     },
     {
       "index": 76,
-      "url": "https://mgit.ac.in/news/dr-m-p-phaniraj-appointed-as-director-of-research-and-development-committee-at-mgit/",
-      "title": "Dr. M. P. Phaniraj appointed as Director of Research and Development Committee at MGIT - MGIT",
-      "filename": "0076_news_dr-m-p-phaniraj-appointed-as-director-of-research-and-development-committee-at-mgit.json"
+      "url": "https://mgit.ac.in/news/mgit-receives-commendation-from-telangana-public-service-commission/",
+      "title": "MGIT Receives Commendation from Telangana Public Service Commission - MGIT",
+      "filename": "0076_news_mgit-receives-commendation-from-telangana-public-service-commission.json"
     },
     {
       "index": 77,
-      "url": "https://mgit.ac.in/news/national-technology-day/",
-      "title": "National Technology Day - MGIT",
-      "filename": "0077_news_national-technology-day.json"
+      "url": "https://mgit.ac.in/news/successful-blood-donation-camp-at-mgit-in-collaboration-with-lions-club-and-nss-unit/",
+      "title": "Successful Blood Donation Camp at MGIT in Collaboration with Lions Club and NSS Unit - MGIT",
+      "filename": "0077_news_successful-blood-donation-camp-at-mgit-in-collaboration-with-lions-club-and-nss-unit.json"
     },
     {
       "index": 78,
-      "url": "https://mgit.ac.in/news/expert-lecture-on-innovative-infrastructure-solutions-through-pre-engineered-buildings/",
-      "title": "Expert Lecture on “Innovative Infrastructure Solutions through Pre-Engineered Buildings” - MGIT",
-      "filename": "0078_news_expert-lecture-on-innovative-infrastructure-solutions-through-pre-engineered-buildings.json"
+      "url": "https://mgit.ac.in/news/mgit-successfully-hosts-internal-hackathon-for-smart-india-hackathon-2023/",
+      "title": "MGIT Successfully Hosts Internal Hackathon for Smart India Hackathon 2023 - MGIT",
+      "filename": "0078_news_mgit-successfully-hosts-internal-hackathon-for-smart-india-hackathon-2023.json"
     },
     {
       "index": 79,
-      "url": "https://mgit.ac.in/news/mgit-faculty-achieves-guinness-world-record/",
-      "title": "MGIT Faculty Achieves Guinness World Record - MGIT",
-      "filename": "0079_news_mgit-faculty-achieves-guinness-world-record.json"
+      "url": "https://mgit.ac.in/news/cigniti-convocation-program/",
+      "title": "Cigniti Convocation Program - MGIT",
+      "filename": "0079_news_cigniti-convocation-program.json"
     },
     {
       "index": 80,
-      "url": "https://mgit.ac.in/news/hitachi-vantara-campus-placement-drive/",
-      "title": "Hitachi Vantara Campus Placement Drive - MGIT",
-      "filename": "0080_news_hitachi-vantara-campus-placement-drive.json"
+      "url": "https://mgit.ac.in/news/one-day-on-campus-study-abroad-fair/",
+      "title": "One Day On Campus Study Abroad Fair - MGIT",
+      "filename": "0080_news_one-day-on-campus-study-abroad-fair.json"
     },
     {
       "index": 81,
-      "url": "https://mgit.ac.in/news/expert-lecture-on-explainable-ai/",
-      "title": "Expert Lecture on “Explainable AI” - MGIT",
-      "filename": "0081_news_expert-lecture-on-explainable-ai.json"
+      "url": "https://mgit.ac.in/news/certificate-of-recognition-to-mgit-by-global-education-and-careers-forum/",
+      "title": "Certificate of Recognition to MGIT by Global Education and Careers Forum - MGIT",
+      "filename": "0081_news_certificate-of-recognition-to-mgit-by-global-education-and-careers-forum.json"
     },
     {
       "index": 82,
-      "url": "https://mgit.ac.in/news/mgit-hosts-expert-lecture-on-industry-expectations-from-graduating-engineers/",
-      "title": "MGIT Hosts Expert Lecture on Industry Expectations from Graduating Engineers - MGIT",
-      "filename": "0082_news_mgit-hosts-expert-lecture-on-industry-expectations-from-graduating-engineers.json"
+      "url": "https://mgit.ac.in/news/a-fire-safety-awareness-program-mock-drill/",
+      "title": "A Fire Safety awareness program (Mock drill) - MGIT",
+      "filename": "0082_news_a-fire-safety-awareness-program-mock-drill.json"
     },
     {
       "index": 83,
-      "url": "https://mgit.ac.in/news/pyro-group-select/",
-      "title": "Pyro Group Select - MGIT",
-      "filename": "0083_news_pyro-group-select.json"
+      "url": "https://mgit.ac.in/news/mindtree-selects/",
+      "title": "MindTree Selects",
+      "filename": "0083_news_mindtree-selects.json"
     },
     {
       "index": 84,
-      "url": "https://mgit.ac.in/news/guest-lecture-on-stress-management-by-dr-p-c-b-gupta-at-mgit/",
-      "title": "Guest Lecture on Stress Management by Dr. P.C.B. Gupta at MGIT - MGIT",
-      "filename": "0084_news_guest-lecture-on-stress-management-by-dr-p-c-b-gupta-at-mgit.json"
+      "url": "https://mgit.ac.in/news/career-guidance-cell-mgit-hosts-study-abroad-seminar-for-cse-and-it-students/",
+      "title": "Career Guidance Cell-MGIT Hosts Study Abroad Seminar for CSE and IT Students - MGIT",
+      "filename": "0084_news_career-guidance-cell-mgit-hosts-study-abroad-seminar-for-cse-and-it-students.json"
     },
     {
       "index": 85,
-      "url": "https://mgit.ac.in/news/national-voters-day/",
-      "title": "National Voters Day - MGIT",
-      "filename": "0085_news_national-voters-day.json"
+      "url": "https://mgit.ac.in/news/industrial-visit-to-m-s-central-institute-of-tool-design-balanagar-hyderabad-2/",
+      "title": "Industrial Visit to M/s. Central Institute of Tool Design, Balanagar, Hyderabad - MGIT",
+      "filename": "0085_news_industrial-visit-to-m-s-central-institute-of-tool-design-balanagar-hyderabad-2.json"
     },
     {
       "index": 86,
-      "url": "https://mgit.ac.in/news/successful-blood-donation-camp-at-mgit-in-collaboration-with-lions-club-and-nss-unit/",
-      "title": "Successful Blood Donation Camp at MGIT in Collaboration with Lions Club and NSS Unit - MGIT",
-      "filename": "0086_news_successful-blood-donation-camp-at-mgit-in-collaboration-with-lions-club-and-nss-unit.json"
+      "url": "https://mgit.ac.in/news/mgit-alumnus-honored-with-prestigious-international-award/",
+      "title": "MGIT Alumnus Honored with Prestigious International Award - MGIT",
+      "filename": "0086_news_mgit-alumnus-honored-with-prestigious-international-award.json"
     },
     {
       "index": 87,
-      "url": "https://mgit.ac.in/news/expert-lecture-on-from-core-engineering-to-smart-engineering-with-ai-organized-at-mgit/",
-      "title": "Expert Lecture on “From Core Engineering to Smart Engineering with AI” Organized at MGIT - MGIT",
-      "filename": "0087_news_expert-lecture-on-from-core-engineering-to-smart-engineering-with-ai-organized-at-mgit.json"
+      "url": "https://mgit.ac.in/news/mgit-and-iriset-forge-a-strategic-partnership-with-mou-signing/",
+      "title": "MGIT and IRISET Forge a Strategic Partnership with MOU Signing - MGIT",
+      "filename": "0087_news_mgit-and-iriset-forge-a-strategic-partnership-with-mou-signing.json"
     },
     {
       "index": 88,
-      "url": "https://mgit.ac.in/news/training-placements-cell-mgit-organised-campus-industry-engagement-program-on-12-april-2023/",
-      "title": "Training & Placements Cell, MGIT organised Campus-Industry Engagement Program on 12 April 2023. - MGIT",
-      "filename": "0088_news_training-placements-cell-mgit-organised-campus-industry-engagement-program-on-12-april-2023.json"
+      "url": "https://mgit.ac.in/news/mgits-eee-department-takes-learning-beyond-the-classroom-with-an-industrial-visit-to-the-nuclear-fuel-complex-on-may-13-2023/",
+      "title": "MGIT's EEE Department Takes Learning Beyond the Classroom with an Industrial Visit to the Nuclear Fuel Complex on May 13, 2023! - MGIT",
+      "filename": "0088_news_mgits-eee-department-takes-learning-beyond-the-classroom-with-an-industrial-visit-to-the-nuclea.json"
     },
     {
       "index": 89,
-      "url": "https://mgit.ac.in/news/strengthening-research-collaboration-women-faculty-from-mech-mct-explore-phd-opportunities-and-funding-at-iith-on-30th-april-2024/",
-      "title": "Strengthening Research Collaboration: Women Faculty from Mech/MCT Explore PhD Opportunities and Funding at IITH on 30th April 2024 - MGIT",
-      "filename": "0089_news_strengthening-research-collaboration-women-faculty-from-mech-mct-explore-phd-opportunities-and-.json"
+      "url": "https://mgit.ac.in/news/expert-lecture-on-role-of-cloud-computing-in-building-smart-energy-systems/",
+      "title": "Expert Lecture on “Role of Cloud Computing in Building Smart Energy Systems” - MGIT",
+      "filename": "0089_news_expert-lecture-on-role-of-cloud-computing-in-building-smart-energy-systems.json"
     },
     {
       "index": 90,
-      "url": "https://mgit.ac.in/news/mgit-conducts-faculty-development-program-on-innovative-teaching-techniques-for-quality-enhancement/",
-      "title": "MGIT Conducts Faculty Development Program on Innovative Teaching Techniques for Quality Enhancement - MGIT",
-      "filename": "0090_news_mgit-conducts-faculty-development-program-on-innovative-teaching-techniques-for-quality-enhance.json"
-    },
-    {
-      "index": 91,
-      "url": "https://mgit.ac.in/news/iot-boot-camp-inaugurated-at-mgit-in-collaboration-with-nielit-aurangabad/",
-      "title": "IoT Boot Camp Inaugurated at MGIT in Collaboration with NIELIT, Aurangabad - MGIT",
-      "filename": "0091_news_iot-boot-camp-inaugurated-at-mgit-in-collaboration-with-nielit-aurangabad.json"
-    },
-    {
-      "index": 92,
-      "url": "https://mgit.ac.in/news/mahatma-gandhi-institute-of-technology-launches-ai-tec-club-and-national-materials-genome-program/",
-      "title": "Mahatma Gandhi Institute of Technology Launches AI-TEC Club and National Materials Genome Program - MGIT",
-      "filename": "0092_news_mahatma-gandhi-institute-of-technology-launches-ai-tec-club-and-national-materials-genome-progr.json"
-    },
-    {
-      "index": 93,
-      "url": "https://mgit.ac.in/news/mgits-career-development-cell-hosts-insightful-lecture-on-time-management-and-growth/",
-      "title": "MGIT's Career Development Cell Hosts Insightful Lecture on Time Management and Growth - MGIT",
-      "filename": "0093_news_mgits-career-development-cell-hosts-insightful-lecture-on-time-management-and-growth.json"
-    },
-    {
-      "index": 94,
-      "url": "https://mgit.ac.in/news/mahatma-gandhi-institute-of-technology-mgit-receives-recognition-as-top-100-local-chapter-by-swayam-nptel-for-outstanding-performance-in-online-certification-courses/",
-      "title": "Mahatma Gandhi Institute of Technology (MGIT) Receives Recognition as Top 100 Local Chapter by SWAYAM-NPTEL for Outstanding Performance in Online Certification Courses - MGIT",
-      "filename": "0094_news_mahatma-gandhi-institute-of-technology-mgit-receives-recognition-as-top-100-local-chapter-by-sw.json"
-    },
-    {
-      "index": 95,
-      "url": "https://mgit.ac.in/news/mgit-students-explore-advancements-in-oceanic-research-during-visit-to-incois/",
-      "title": "MGIT Students Explore Advancements in Oceanic Research during Visit to INCOIS - MGIT",
-      "filename": "0095_news_mgit-students-explore-advancements-in-oceanic-research-during-visit-to-incois.json"
+      "url": "https://mgit.ac.in/news/mgit-eee-students-visit-iit-hyderabad-for-industry-lecture-on-smart-grids/",
+      "title": "MGIT EEE Students Visit IIT Hyderabad for Industry Lecture on Smart Grids - MGIT",
+      "filename": "0090_news_mgit-eee-students-visit-iit-hyderabad-for-industry-lecture-on-smart-grids.json"
     }
   ]
 }

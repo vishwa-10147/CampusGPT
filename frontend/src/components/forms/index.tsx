@@ -1,10 +1,10 @@
 // ==============================================================================
 // CampusGPT Frontend — Form Components
 // ==============================================================================
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { cn } from '../ui'
-import { Button, Input, Card, Spinner } from '../ui'
+import { Button, Input, Card } from '../ui'
 import { Eye, EyeOff, Loader2 } from 'lucide-react'
 
 // Login Form

@@ -5,6 +5,7 @@ from typing import List, Tuple, Optional, BinaryIO
 from pathlib import Path
 from uuid import UUID
 
+from app.core.config import settings
 from app.rag.chunker import split_pdf_by_pages, split_text_recursive, TextChunk, clean_text
 from app.services.embedding_service import get_embedding_service
 from app.repositories.document_repo import DocumentRepository, DocumentChunkRepository, IngestionJobRepository
@@ -38,18 +39,20 @@ class FileProcessingService:
 
         try:
             # 1. Extract text by page
-            storage_path = Path("/app/uploads") / document.filename
+            storage_path = Path(settings.upload_dir) / document.filename
             pages = self._extract_text_by_page(storage_path, document.mime_type)
+            pages = [(page_number, clean_text(text)) for page_number, text in pages]
 
             if job:
                 await self.job_repo.update_progress(job.id, "processing", 30)
 
-            # 2. Chunk text
-            chunks = split_pdf_by_pages(pages)
-            chunks = [clean_text(c.content) for c in chunks]  # Clean each chunk
-
-            # Filter empty chunks
-            chunks = [c for c in chunks if c.strip()]
+            # 2. Chunk text (keeps page numbers)
+            chunks = split_pdf_by_pages(
+                pages,
+                chunk_size=settings.chunk_size,
+                chunk_overlap=settings.chunk_overlap,
+            )
+            chunks = [c for c in chunks if c.content.strip()]
             if not chunks:
                 raise ValueError("No extractable text found in document")
 
@@ -57,25 +60,27 @@ class FileProcessingService:
                 await self.job_repo.update_progress(job.id, "processing", 50)
 
             # 3. Generate embeddings
-            texts = [c for c in chunks]
-            embedding_response = await self.embedding.embed(texts)
+            embedding_response = await self.embedding.embed([c.content for c in chunks])
             embeddings = embedding_response.embeddings
 
             if job:
                 await self.job_repo.update_progress(job.id, "processing", 70)
 
-            # 4. Create chunk records with embeddings
-            chunk_records = []
-            for i, (chunk, embedding) in enumerate(zip(chunks, embeddings)):
-                chunk_record = DocumentChunk(
+            # 4. Create chunk records, skipping failed (all-zero) embeddings
+            chunk_records = [
+                DocumentChunk(
                     document_id=document_id,
-                    content=chunk,
+                    content=chunk.content,
                     embedding=embedding,
                     chunk_index=i,
-                    page_number=None,  # Could extract from split_pdf_by_pages
-                    metadata={"char_count": len(chunk)},
+                    page_number=chunk.page_number,
+                    chunk_metadata={**chunk.metadata, "char_count": len(chunk.content)},
                 )
-                chunk_records.append(chunk_record)
+                for i, (chunk, embedding) in enumerate(zip(chunks, embeddings))
+                if embedding and any(v != 0.0 for v in embedding)
+            ]
+            if not chunk_records:
+                raise ValueError("Embedding failed for every chunk")
 
             await self.chunk_repo.bulk_create_chunks(chunk_records)
 
@@ -87,13 +92,16 @@ class FileProcessingService:
             if job:
                 await self.job_repo.update_progress(job.id, "completed", 100)
 
+            await self.session.commit()
             return True
 
         except Exception as e:
-            # Update status to failed
+            await self.session.rollback()
             await self.doc_repo.update_status(document_id, "failed")
+            job = await self.job_repo.get_by_document(document_id)
             if job:
                 await self.job_repo.update_progress(job.id, "failed", 0, str(e))
+            await self.session.commit()
             return False
 
     def _extract_text_by_page(self, file_path: Path, mime_type: str) -> List[Tuple[int, str]]:

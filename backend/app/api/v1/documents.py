@@ -20,6 +20,7 @@ from app.services.document_service import DocumentService
 from app.models.user import User
 from app.core.database import async_session_maker
 from app.ingestion.ingestion_service import IngestionService
+from app.services.file_service import FileProcessingService
 
 router = APIRouter(prefix="/documents", tags=["Documents"])
 
@@ -79,6 +80,7 @@ async def ingest_mgit_sync(
 
 @router.post("/upload", response_model=DocumentUploadResponse, status_code=status.HTTP_201_CREATED)
 async def upload_document(
+    background_tasks: BackgroundTasks,
     file: UploadFile = File(...),
     user_id: UUID = Depends(get_current_user_id),
     doc_service: DocumentService = Depends(get_document_service),
@@ -105,9 +107,17 @@ async def upload_document(
             content_type=content_type,
             size=size,
         )
-        return document
     except ValueError as e:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+
+    background_tasks.add_task(process_uploaded_document, document.id)
+    return document
+
+
+async def process_uploaded_document(document_id: UUID) -> None:
+    """Extract, chunk and embed an uploaded document in its own DB session."""
+    async with async_session_maker() as session:
+        await FileProcessingService(session).process_document(document_id)
 
 
 @router.get("", response_model=DocumentListResponse)
@@ -134,6 +144,24 @@ async def get_document(
     document = await doc_service.get_document(document_id, user.id, user.is_admin)
     if not document:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Document not found")
+    return document
+
+
+@router.post("/{document_id}/reprocess", response_model=DocumentResponse)
+async def reprocess_document(
+    document_id: UUID,
+    background_tasks: BackgroundTasks,
+    user: User = Depends(get_current_user),
+    doc_service: DocumentService = Depends(get_document_service),
+):
+    """Clear a document's chunks and run processing again."""
+    try:
+        document = await doc_service.reset_for_reprocessing(document_id, user.id, user.is_admin)
+    except ValueError as e:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+    if not document:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Document not found")
+    background_tasks.add_task(process_uploaded_document, document_id)
     return document
 
 

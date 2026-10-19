@@ -76,3 +76,18 @@ export interface StreamingToken {
   tokens_used?: number
   error?: string
 }
+export interface ConversationListResponse {
+  conversations: Conversation[]
+  total: number
+  page: number
+  page_size: number
+  total_pages: number
+}
+
+export interface DocumentListResponse {
+  documents: Document[]
+  total: number
+  page: number
+  page_size: number
+  total_pages: number
+}

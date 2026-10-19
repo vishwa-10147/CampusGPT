@@ -74,10 +74,12 @@ def decode_token(token: str) -> Optional[dict]:
         return None
 
 
-def get_token_subject(token: str) -> Optional[UUID]:
-    """Extract the subject (user ID) from a token."""
+def get_token_subject(token: str, token_type: Optional[str] = None) -> Optional[UUID]:
+    """Extract the subject (user ID) from a token, optionally requiring its type."""
     payload = decode_token(token)
     if not payload:
+        return None
+    if token_type and payload.get("type") != token_type:
         return None
     try:
         return UUID(payload.get("sub"))

@@ -4,7 +4,7 @@
 import React, { useState } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
 import { cn } from '../ui'
-import { Button, Avatar } from '../ui'
+import { Button, Avatar, Separator } from '../ui'
 import { useAuth } from '../../features/auth/AuthContext'
 import {
   LayoutDashboard,
@@ -14,8 +14,6 @@ import {
   LogOut,
   Menu,
   X,
-  ChevronLeft,
-  ChevronRight,
   BookOpen,
   Bot,
 } from 'lucide-react'

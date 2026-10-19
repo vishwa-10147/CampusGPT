@@ -70,3 +70,6 @@ build/
 # TypeScript
 *.tsbuildinfo.env
 **/.env
+
+#Skills
+/.claud-skills

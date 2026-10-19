@@ -14,6 +14,7 @@ from app.core.security import (
     decode_token,
     get_token_subject,
 )
+from app.core.config import settings
 from app.repositories.user_repo import UserRepository
 from app.schemas.auth import RegisterRequest, LoginRequest, TokenResponse, UserResponse
 from app.models.user import User
@@ -47,8 +48,8 @@ class AuthService:
 
         return UserResponse.model_validate(user)
 
-    async def login(self, data: LoginRequest) -> TokenResponse:
-        """Authenticate user and return tokens."""
+    async def login(self, data: LoginRequest) -> tuple[TokenResponse, str]:
+        """Authenticate user and return (access token response, refresh token)."""
         user = await self.user_repo.get_by_email(data.email)
         if not user:
             raise ValueError("Invalid credentials")
@@ -63,14 +64,10 @@ class AuthService:
         access_token = create_access_token(user.id)
         refresh_token = create_refresh_token(user.id)
 
-        return TokenResponse(
-            access_token=access_token,
-            token_type="bearer",
-            expires_in=15 * 60,  # 15 minutes in seconds
-        )
+        return self._token_response(access_token), refresh_token
 
-    async def refresh_token(self, refresh_token: str) -> TokenResponse:
-        """Refresh access token using refresh token."""
+    async def refresh_token(self, refresh_token: str) -> tuple[TokenResponse, str]:
+        """Exchange a refresh token for a new (access token response, rotated refresh token)."""
         payload = decode_token(refresh_token)
         if not payload or payload.get("type") != "refresh":
             raise ValueError("Invalid refresh token")
@@ -86,10 +83,14 @@ class AuthService:
         access_token = create_access_token(user_id)
         new_refresh_token = create_refresh_token(user_id)
 
+        return self._token_response(access_token), new_refresh_token
+
+    @staticmethod
+    def _token_response(access_token: str) -> TokenResponse:
         return TokenResponse(
             access_token=access_token,
             token_type="bearer",
-            expires_in=15 * 60,
+            expires_in=settings.access_token_expire_minutes * 60,
         )
 
     async def get_current_user(self, access_token: str) -> UserResponse:

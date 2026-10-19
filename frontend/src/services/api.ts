@@ -2,7 +2,7 @@
 // CampusGPT Frontend — API Client
 // ==============================================================================
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios'
-import type { ApiError } from '../types'
+import type { ApiError, ConversationListResponse, DocumentListResponse } from '../types'
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
@@ -27,17 +27,20 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   async (error: AxiosError<ApiError>) => {
-    const originalRequest = error.config
+    const originalRequest = error.config as (InternalAxiosRequestConfig & { _retry?: boolean }) | undefined
+    const isAuthEndpoint = /\/auth\/(login|register|refresh|logout)/.test(originalRequest?.url ?? '')
 
-    // Handle 401 - try to refresh token
-    if (error.response?.status === 401 && originalRequest && !originalRequest.url?.includes('/auth/')) {
+    // Handle 401 - refresh the access token once, then retry
+    if (error.response?.status === 401 && originalRequest && !originalRequest._retry && !isAuthEndpoint) {
+      originalRequest._retry = true
       try {
         await api.post('/auth/refresh')
-        // Retry original request
         return api(originalRequest)
       } catch {
         // Refresh failed, redirect to login
-        window.location.href = '/login'
+        if (!['/login', '/register'].includes(window.location.pathname)) {
+          window.location.href = '/login'
+        }
       }
     }
 
@@ -66,7 +69,7 @@ export const authApi = {
 // Conversation API
 export const conversationApi = {
   list: (params?: { page?: number; page_size?: number }) =>
-    api.get('/conversations', { params }),
+    api.get<ConversationListResponse>('/conversations', { params }),
 
   create: (data: { title?: string }) =>
     api.post('/conversations', data),
@@ -81,12 +84,62 @@ export const conversationApi = {
     api.delete(`/conversations/${id}`),
 }
 
+export interface StreamEvent {
+  event: string
+  data: any
+}
+
+// Axios can't stream response bodies in the browser, so SSE goes through fetch
+async function* streamMessage(conversationId: string, content: string): AsyncGenerator<StreamEvent> {
+  const send = () =>
+    fetch(`${API_BASE_URL}/api/v1/conversations/${conversationId}/messages`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json', Accept: 'text/event-stream' },
+      body: JSON.stringify({ content, stream: true }),
+    })
+
+  let response = await send()
+  if (response.status === 401) {
+    await api.post('/auth/refresh')
+    response = await send()
+  }
+  if (!response.ok || !response.body) {
+    const body = await response.json().catch(() => null)
+    throw new Error(body?.detail || `Request failed (${response.status})`)
+  }
+
+  const reader = response.body.getReader()
+  const decoder = new TextDecoder()
+  let buffer = ''
+
+  while (true) {
+    const { done, value } = await reader.read()
+    if (done) break
+    buffer += decoder.decode(value, { stream: true })
+
+    // Events are separated by a blank line; keep any partial event in the buffer
+    const parts = buffer.split('\n\n')
+    buffer = parts.pop() ?? ''
+
+    for (const part of parts) {
+      let event = 'message'
+      const dataLines: string[] = []
+      for (const line of part.split('\n')) {
+        if (line.startsWith('event: ')) event = line.slice(7).trim()
+        else if (line.startsWith('data: ')) dataLines.push(line.slice(6))
+      }
+      if (dataLines.length) yield { event, data: JSON.parse(dataLines.join('\n')) }
+    }
+  }
+}
+
 // Message API
 export const messageApi = {
-  send: (conversationId: string, data: { content: string; stream: boolean }) =>
-    api.post(`/conversations/${conversationId}/messages`, data, {
-      responseType: data.stream ? 'stream' : 'json',
-    }),
+  send: (conversationId: string, data: { content: string }) =>
+    api.post(`/conversations/${conversationId}/messages`, { ...data, stream: false }),
+
+  stream: streamMessage,
 
   retry: (conversationId: string, messageId: string) =>
     api.post(`/conversations/${conversationId}/messages/${messageId}/retry`),
@@ -109,19 +162,22 @@ export const documentApi = {
   },
 
   list: (params?: { page?: number; page_size?: number; status?: string }) =>
-    api.get('/documents', { params }),
+    api.get<DocumentListResponse>('/documents', { params }),
 
   get: (id: string) =>
     api.get(`/documents/${id}`),
 
   delete: (id: string) =>
     api.delete(`/documents/${id}`),
+
+  reprocess: (id: string) =>
+    api.post(`/documents/${id}/reprocess`),
 }
 
 // Admin API
 export const adminApi = {
   documents: (params?: { page?: number; page_size?: number; status?: string }) =>
-    api.get('/admin/documents', { params }),
+    api.get<DocumentListResponse>('/admin/documents', { params }),
 
   stats: () =>
     api.get('/admin/stats'),

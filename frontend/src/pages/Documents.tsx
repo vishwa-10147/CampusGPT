@@ -1,13 +1,13 @@
 // ==============================================================================
 // CampusGPT Frontend — Documents Page
 // ==============================================================================
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { documentApi } from '../services/api'
 import { MainLayout } from '../components/layout'
-import { Button, Card, Badge, Spinner, UploadForm } from '../components/ui'
+import { Button, Card, Badge, Spinner } from '../components/ui'
+import { UploadForm } from '../components/forms'
 import { FileText, Trash2, RefreshCw, Loader2, Eye, AlertCircle, CheckCircle, Clock } from 'lucide-react'
-import type { Document } from '../types'
 import { formatDistanceToNow } from 'date-fns'
 
 const STATUS_CONFIG = {
@@ -24,7 +24,10 @@ export const Documents = () => {
 
   const { data, isLoading } = useQuery({
     queryKey: ['documents', page, statusFilter],
-    queryFn: () => documentApi.list({ page, page_size: 20, status: statusFilter || undefined }),
+    queryFn: () => documentApi.list({ page, page_size: 20, status: statusFilter || undefined }).then(r => r.data),
+    // Poll while any document is still being processed
+    refetchInterval: (query) =>
+      query.state.data?.documents.some(d => d.status === 'pending' || d.status === 'processing') ? 3000 : false,
   })
 
   const uploadMutation = useMutation({
@@ -42,7 +45,7 @@ export const Documents = () => {
   })
 
   const reprocessMutation = useMutation({
-    mutationFn: (id: string) => documentApi.upload(new File([], '')), // Would need a reprocess endpoint
+    mutationFn: (id: string) => documentApi.reprocess(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['documents'] })
     },
@@ -70,7 +73,7 @@ export const Documents = () => {
           </div>
           <div className="p-6">
             <UploadForm
-              onUpload={uploadMutation.mutateAsync}
+              onUpload={async (file) => { await uploadMutation.mutateAsync(file) }}
               isUploading={uploadMutation.isPending}
             />
           </div>
@@ -101,7 +104,11 @@ export const Documents = () => {
         </Card>
 
         {/* Documents List */}
-        {documents.length === 0 ? (
+        {isLoading ? (
+          <div className="flex justify-center p-12">
+            <Spinner size="lg" />
+          </div>
+        ) : documents.length === 0 ? (
           <Card className="p-12 text-center">
             <FileText className="h-12 w-12 text-neutral-300 mx-auto mb-4" />
             <h3 className="text-lg font-medium text-neutral-900 mb-2">No documents yet</h3>
@@ -123,7 +130,10 @@ export const Documents = () => {
                       <div className="min-w-0">
                         <div className="flex items-center gap-2 mb-1">
                           <h3 className="font-medium text-neutral-900 truncate">{doc.original_name}</h3>
-                          <Badge variant={statusConfig.color}>{statusConfig.label}</Badge>
+                          <Badge variant={statusConfig.color}>
+                            <Icon className="h-3 w-3 mr-1 inline" />
+                            {statusConfig.label}
+                          </Badge>
                         </div>
                         <div className="flex items-center gap-4 text-sm text-neutral-500">
                           <span>{(doc.size_bytes / 1024 / 1024).toFixed(2)} MB</span>
@@ -145,9 +155,8 @@ export const Documents = () => {
                         </Button>
                       )}
                       <Button
-                        variant="ghost"
-                        size="sm"
                         variant="danger"
+                        size="sm"
                         onClick={() => deleteMutation.mutate(doc.id)}
                         disabled={deleteMutation.isPending}
                         aria-label={`Delete ${doc.original_name}`}

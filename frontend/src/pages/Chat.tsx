@@ -1,14 +1,14 @@
 // ==============================================================================
 // CampusGPT Frontend — Chat Page
 // ==============================================================================
-import React, { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { conversationApi, messageApi } from '../services/api'
 import { MessageBubble, ChatComposer, WelcomeScreen, ChatLoading, ChatError } from '../components/chat'
-import { Sidebar, MainLayout } from '../components/layout'
-import { Button, Spinner } from '../components/ui'
-import { Plus, Send, Trash2, Edit2, Loader2 } from 'lucide-react'
+import { MainLayout } from '../components/layout'
+import { Button } from '../components/ui'
+import { Plus, Trash2, Edit2 } from 'lucide-react'
 import type { Conversation, Message } from '../types'
 import { formatDistanceToNow } from 'date-fns'
 
@@ -18,25 +18,11 @@ export const Chat = () => {
   const { conversationId } = useParams<{ conversationId: string }>()
 
   // State
-  const [conversations, setConversations] = useState<Conversation[]>([])
   const [messages, setMessages] = useState<Message[]>([])
   const [currentConversation, setCurrentConversation] = useState<Conversation | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [sidebarOpen, setSidebarOpen] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
-
-  // Fetch conversations
-  const { data: conversationsData, isLoading: conversationsLoading } = useQuery({
-    queryKey: ['conversations'],
-    queryFn: () => conversationApi.list(),
-  })
-
-  useEffect(() => {
-    if (conversationsData) {
-      setConversations(conversationsData.conversations)
-    }
-  }, [conversationsData])
 
   // Fetch messages for current conversation
   useEffect(() => {
@@ -64,7 +50,6 @@ export const Chat = () => {
     mutationFn: () => conversationApi.create({}),
     onSuccess: (response) => {
       const newConv = response.data
-      setConversations(prev => [newConv, ...prev])
       navigate(`/chat/${newConv.id}`)
       queryClient.invalidateQueries({ queryKey: ['conversations'] })
     },
@@ -73,118 +58,75 @@ export const Chat = () => {
     },
   })
 
-  // Send message
-  const sendMessage = useMutation({
-    mutationFn: (content: string) => {
-      if (!currentConversation) throw new Error('No conversation selected')
-      return messageApi.send(currentConversation.id, { content, stream: true })
-    },
-    onMutate: async (content) => {
-      // Optimistic update - add user message
-      const tempUserMessage: Message = {
-        id: 'temp-' + Date.now(),
-        conversation_id: currentConversation!.id,
+  // Send a message and stream the assistant reply
+  const handleStreamResponse = useCallback(async (content: string) => {
+    if (!currentConversation) return
+    const conversationIdForSend = currentConversation.id
+    const now = Date.now()
+    const tempUserId = 'temp-' + now
+    const tempId = 'temp-assistant-' + now
+
+    setMessages(prev => [
+      ...prev,
+      {
+        id: tempUserId,
+        conversation_id: conversationIdForSend,
         role: 'user',
         content,
         sources: null,
         tokens_used: null,
         created_at: new Date().toISOString(),
+      },
+      {
+        id: tempId,
+        conversation_id: conversationIdForSend,
+        role: 'assistant',
+        content: '',
+        sources: [],
+        tokens_used: 0,
+        created_at: new Date().toISOString(),
+      },
+    ])
+    setIsLoading(true)
+    setError(null)
+
+    const updateAssistant = (patch: Partial<Message>) =>
+      setMessages(prev => prev.map(m => (m.id === tempId ? { ...m, ...patch } : m)))
+
+    let assistantContent = ''
+    try {
+      for await (const { event, data } of messageApi.stream(conversationIdForSend, content)) {
+        if (event === 'user_message') {
+          setMessages(prev => prev.map(m => (m.id === tempUserId ? data : m)))
+        } else if (event === 'token' && data.token) {
+          assistantContent += data.token
+          updateAssistant({ content: assistantContent })
+        } else if (event === 'sources') {
+          updateAssistant({ sources: Array.isArray(data) ? data : data.sources })
+        } else if (event === 'done') {
+          // Swap the temp id for the saved one so the message stays in the list
+          updateAssistant({
+            id: data.message_id ?? tempId,
+            sources: data.sources ?? undefined,
+            tokens_used: data.tokens_used ?? 0,
+          })
+        } else if (event === 'error') {
+          throw new Error(data.error || 'The model failed to respond')
+        }
       }
-      setMessages(prev => [...prev, tempUserMessage])
-      setIsLoading(true)
-      setError(null)
-    },
-    onError: (err: any) => {
-      setError(err.response?.data?.detail || 'Failed to send message')
+      queryClient.invalidateQueries({ queryKey: ['conversations'] })
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Streaming error')
+      setMessages(prev => prev.filter(m => m.id !== tempId))
+    } finally {
       setIsLoading(false)
-    },
-  })
-
-  // Handle streaming response
-  const handleStreamResponse = useCallback(async (content: string) => {
-    if (!currentConversation) return
-
-    sendMessage.mutate(content, {
-      onSuccess: async (response) => {
-        // Handle streaming response
-        const reader = response.data.getReader()
-        const decoder = new TextDecoder()
-        let assistantContent = ''
-        let sources: any[] = []
-        let tokensUsed = 0
-        let messageId: string | null = null
-
-        // Add temporary assistant message
-        const tempId = 'temp-assistant-' + Date.now()
-        const tempAssistantMessage: Message = {
-          id: tempId,
-          conversation_id: currentConversation.id,
-          role: 'assistant',
-          content: '',
-          sources: [],
-          tokens_used: 0,
-          created_at: new Date().toISOString(),
-        }
-        setMessages(prev => [...prev, tempAssistantMessage])
-
-        try {
-          while (true) {
-            const { done, value } = await reader.read()
-            if (done) break
-
-            const chunk = decoder.decode(value)
-            const lines = chunk.split('\n')
-
-            for (const line of lines) {
-              if (line.startsWith('event: ')) {
-                const event = line.slice(7)
-                const dataLine = lines[lines.indexOf(line) + 1]
-                if (dataLine?.startsWith('data: ')) {
-                  const data = JSON.parse(dataLine.slice(6))
-
-                  if (event === 'token' && data.token) {
-                    assistantContent += data.token
-                    setMessages(prev => prev.map(m =>
-                      m.id === tempId ? { ...m, content: assistantContent } : m
-                    ))
-                  } else if (event === 'sources') {
-                    sources = data.sources
-                    setMessages(prev => prev.map(m =>
-                      m.id === tempId ? { ...m, sources } : m
-                    ))
-                  } else if (event === 'done') {
-                    tokensUsed = data.tokens_used || 0
-                    messageId = data.message_id
-                  } else if (event === 'error') {
-                    throw new Error(data.error)
-                  }
-                }
-              }
-            }
-          }
-
-          // Replace temp message with real one
-          setMessages(prev => prev.filter(m => m.id !== tempId))
-          queryClient.invalidateQueries({ queryKey: ['conversations'] })
-          queryClient.invalidateQueries({ queryKey: ['conversation', currentConversation.id] })
-        } catch (err) {
-          setError(err instanceof Error ? err.message : 'Streaming error')
-          setMessages(prev => prev.filter(m => m.id !== tempId))
-        } finally {
-          setIsLoading(false)
-        }
-      },
-      onError: () => {
-        setIsLoading(false)
-      },
-    })
-  }, [currentConversation, sendMessage, queryClient, navigate])
+    }
+  }, [currentConversation, queryClient])
 
   // Delete conversation
   const deleteConversation = useMutation({
     mutationFn: (id: string) => conversationApi.delete(id),
     onSuccess: (_, id) => {
-      setConversations(prev => prev.filter(c => c.id !== id))
       if (currentConversation?.id === id) {
         navigate('/chat')
       }
@@ -231,7 +173,7 @@ export const Chat = () => {
                   <Button variant="ghost" size="sm" onClick={() => {}} aria-label="Edit title">
                     <Edit2 className="h-4 w-4" />
                   </Button>
-                  <Button variant="ghost" size="sm" variant="danger" onClick={() => deleteConversation.mutate(currentConversation.id)} aria-label="Delete conversation">
+                  <Button size="sm" variant="danger" onClick={() => deleteConversation.mutate(currentConversation.id)} aria-label="Delete conversation">
                     <Trash2 className="h-4 w-4" />
                   </Button>
                 </>

@@ -1,14 +1,13 @@
 // ==============================================================================
 // CampusGPT Frontend — History Page
 // ==============================================================================
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { conversationApi } from '../services/api'
 import { MainLayout } from '../components/layout'
 import { Button, Card, Badge, Spinner } from '../components/ui'
 import { Plus, Trash2, MessageSquare, ChevronRight, Search, Loader2 } from 'lucide-react'
-import type { Conversation } from '../types'
 import { formatDistanceToNow } from 'date-fns'
 
 export const History = () => {
@@ -17,9 +16,9 @@ export const History = () => {
   const [page, setPage] = useState(1)
   const [search, setSearch] = useState('')
 
-  const { data, isLoading, error } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['conversations', page, search],
-    queryFn: () => conversationApi.list({ page, page_size: 20 }),
+    queryFn: () => conversationApi.list({ page, page_size: 20 }).then(r => r.data),
   })
 
   const deleteMutation = useMutation({
@@ -116,9 +115,8 @@ export const History = () => {
                       <ChevronRight className="h-4 w-4" />
                     </Button>
                     <Button
-                      variant="ghost"
-                      size="sm"
                       variant="danger"
+                      size="sm"
                       onClick={() => deleteMutation.mutate(conv.id)}
                       disabled={deleteMutation.isPending}
                       aria-label={`Delete conversation: ${conv.title}`}

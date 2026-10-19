@@ -8,13 +8,13 @@ import { MainLayout } from './components/layout'
 import { Spinner } from './components/ui'
 
 // Lazy load pages for code splitting
-const Login = lazy(() => import('./pages/Login'))
-const Register = lazy(() => import('./pages/Register'))
-const Chat = lazy(() => import('./pages/Chat'))
-const History = lazy(() => import('./pages/History'))
-const Documents = lazy(() => import('./pages/Documents'))
-const Settings = lazy(() => import('./pages/Settings'))
-const Admin = lazy(() => import('./pages/Admin'))
+const Login = lazy(() => import('./pages/Login').then(m => ({ default: m.Login })))
+const Register = lazy(() => import('./pages/Register').then(m => ({ default: m.Register })))
+const Chat = lazy(() => import('./pages/Chat').then(m => ({ default: m.Chat })))
+const History = lazy(() => import('./pages/History').then(m => ({ default: m.History })))
+const Documents = lazy(() => import('./pages/Documents').then(m => ({ default: m.Documents })))
+const Settings = lazy(() => import('./pages/Settings').then(m => ({ default: m.Settings })))
+const Admin = lazy(() => import('./pages/Admin').then(m => ({ default: m.Admin })))
 
 // Loading fallback
 const PageLoader = () => (

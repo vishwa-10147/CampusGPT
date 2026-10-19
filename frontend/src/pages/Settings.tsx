@@ -1,16 +1,15 @@
 // ==============================================================================
 // CampusGPT Frontend — Settings Page
 // ==============================================================================
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useAuth } from '../features/auth/AuthContext'
 import { MainLayout } from '../components/layout'
 import { Card, Button, Input, Badge } from '../components/ui'
-import { User, Mail, Lock, Bell, Shield, Palette, Loader2 } from 'lucide-react'
+import { User, Bell, Shield, Palette } from 'lucide-react'
 
 export const Settings = () => {
-  const { user, logout, refreshUser } = useAuth()
+  const { user, logout } = useAuth()
   const [activeTab, setActiveTab] = useState<'profile' | 'security' | 'preferences' | 'danger'>('profile')
-  const [isLoading, setIsLoading] = useState(false)
 
   const tabs = [
     { id: 'profile', label: 'Profile', icon: User },
@@ -204,7 +203,7 @@ export const Settings = () => {
                       <p className="font-medium text-red-900">Sign Out Everywhere</p>
                       <p className="text-sm text-red-700">Revoke all active sessions</p>
                     </div>
-                    <Button variant="ghost" variant="danger" onClick={() => logout()}>
+                    <Button variant="danger" onClick={() => logout()}>
                       Sign Out
                     </Button>
                   </div>

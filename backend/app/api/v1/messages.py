@@ -44,10 +44,12 @@ async def send_message(
     )
 
     if data.stream:
-        # Return streaming response
+        # The request session commits before the stream body runs, so commit explicitly
+        await conv_service.session.commit()
         return StreamingResponse(
-            stream_response(conversation_id, user_id, data.content, conv_service, rag_service),
+            stream_response(conversation_id, user_id, user_message, conv_service, rag_service, data.content),
             media_type="text/event-stream",
+            headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
         )
     else:
         # Non-streaming response
@@ -69,21 +71,16 @@ async def send_message(
 async def stream_response(
     conversation_id: UUID,
     user_id: UUID,
-    content: str,
+    user_message: MessageResponse,
     conv_service: ConversationService,
     rag_service: RAGService,
+    content: str,
 ):
     """Generator for SSE streaming response."""
     import json
 
-    # Send user message confirmation first
-    user_msg = await conv_service.add_message(
-        conversation_id=conversation_id,
-        user_id=user_id,
-        role="user",
-        content=content,
-    )
-    yield f"event: user_message\ndata: {user_msg.model_dump_json()}\n\n"
+    # Send user message confirmation first (already saved by send_message)
+    yield f"event: user_message\ndata: {user_message.model_dump_json()}\n\n"
 
     # Stream AI response
     assistant_content = ""
@@ -110,6 +107,7 @@ async def stream_response(
                 sources=sources,
                 tokens_used=tokens_used,
             )
+            await conv_service.session.commit()
             message_id = str(assistant_message.id)
             done_data = StreamingToken(
                 token="",
