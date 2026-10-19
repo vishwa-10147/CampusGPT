@@ -15,66 +15,92 @@ class TextChunk:
     metadata: Dict[str, Any] = field(default_factory=dict)
 
 
+# A sentence ends at . ! or ? followed by whitespace and a character that isn't
+# lowercase, so lowercase continuations ("approx. two") and decimals stay intact.
+_SENTENCE_BOUNDARY = re.compile(r"(?<=[.!?])\s+(?=[^a-z\s])")
+_PARAGRAPH_BREAK = re.compile(r"\n\s*\n")
+
+
+def _split_units(text: str, chunk_size: int) -> List[tuple[str, str]]:
+    """Break text into (separator_before, sentence) pairs.
+
+    The separator records whether a sentence followed another sentence (" "),
+    a line break ("\\n") or a paragraph break ("\\n\\n"), so chunks keep the
+    original structure. Only a single sentence longer than chunk_size is cut,
+    and then on word boundaries.
+    """
+    units: List[tuple[str, str]] = []
+    for p_index, paragraph in enumerate(_PARAGRAPH_BREAK.split(text)):
+        for l_index, line in enumerate(paragraph.split("\n")):
+            for s_index, sentence in enumerate(_SENTENCE_BOUNDARY.split(line.strip())):
+                sentence = sentence.strip()
+                if not sentence:
+                    continue
+                if s_index > 0:
+                    sep = " "
+                elif l_index > 0:
+                    sep = "\n"
+                else:
+                    sep = "\n\n" if p_index > 0 else ""
+
+                if len(sentence) <= chunk_size:
+                    units.append((sep, sentence))
+                    continue
+
+                piece = ""
+                for word in sentence.split():
+                    if piece and len(piece) + 1 + len(word) > chunk_size:
+                        units.append((sep, piece))
+                        sep, piece = " ", word
+                    else:
+                        piece = f"{piece} {word}" if piece else word
+                if piece:
+                    units.append((sep, piece))
+    return units
+
+
+def _joined_length(units: List[tuple[str, str]]) -> int:
+    """Length of the units once joined (the first unit's separator is dropped)."""
+    if not units:
+        return 0
+    return sum(len(sep) + len(unit) for sep, unit in units) - len(units[0][0])
+
+
+def _join(units: List[tuple[str, str]]) -> str:
+    return "".join(unit if i == 0 else sep + unit for i, (sep, unit) in enumerate(units)).strip()
+
+
 def split_text_recursive(
     text: str,
     chunk_size: int = 500,
     chunk_overlap: int = 50,
-    separators: Optional[List[str]] = None,
 ) -> List[TextChunk]:
     """
-    Split text recursively using hierarchical separators.
-    
-    This is similar to LangChain's RecursiveCharacterTextSplitter but simpler.
+    Split text into chunks of at most chunk_size characters without cutting sentences.
+
+    Chunks are packed from whole sentences and keep paragraph and line breaks.
+    Overlap repeats the previous chunk's trailing whole sentences (up to
+    chunk_overlap characters), never a partial sentence.
     """
-    if separators is None:
-        separators = ["\n\n", "\n", ". ", "? ", "! ", "; ", ", ", " ", ""]
+    chunks: List[TextChunk] = []
+    current: List[tuple[str, str]] = []
 
-    def _split(text: str, separators: List[str]) -> List[str]:
-        if not separators:
-            return [text]
+    for unit in _split_units(text, chunk_size):
+        if current and _joined_length(current + [unit]) > chunk_size:
+            chunks.append(TextChunk(content=_join(current), chunk_index=len(chunks)))
 
-        separator = separators[0]
-        remaining_separators = separators[1:]
+            # Carry over whole trailing sentences that fit the overlap budget
+            overlap: List[tuple[str, str]] = []
+            for prev in reversed(current):
+                if _joined_length([prev] + overlap) > chunk_overlap:
+                    break
+                overlap.insert(0, prev)
+            current = overlap if _joined_length(overlap + [unit]) <= chunk_size else []
 
-        if separator == "":
-            # Character-level split
-            return list(text)
+        current.append(unit)
 
-        splits = text.split(separator)
-        result = []
-        for split in splits:
-            if len(split) <= chunk_size:
-                result.append(split)
-            else:
-                # Recursively split with next separator
-                result.extend(_split(split, remaining_separators))
-        return result
-
-    # Initial split
-    splits = _split(text, separators)
-
-    # Now combine splits into chunks with overlap
-    chunks = []
-    current_chunk = ""
-    chunk_index = 0
-
-    for split in splits:
-        # If adding this split would exceed chunk_size, finalize current chunk
-        if current_chunk and len(current_chunk) + len(split) > chunk_size:
-            chunks.append(TextChunk(content=current_chunk.strip(), chunk_index=chunk_index))
-            chunk_index += 1
-
-            # Start new chunk with overlap
-            if chunk_overlap > 0 and len(current_chunk) > chunk_overlap:
-                current_chunk = current_chunk[-chunk_overlap:] + split
-            else:
-                current_chunk = split
-        else:
-            current_chunk += split
-
-    # Add final chunk
-    if current_chunk.strip():
-        chunks.append(TextChunk(content=current_chunk.strip(), chunk_index=chunk_index))
+    if current:
+        chunks.append(TextChunk(content=_join(current), chunk_index=len(chunks)))
 
     return chunks
 
@@ -86,7 +112,7 @@ def split_pdf_by_pages(
 ) -> List[TextChunk]:
     """
     Split PDF pages into chunks, preserving page numbers.
-    
+
     Args:
         pages: List of (page_number, text) tuples
     """
@@ -108,11 +134,12 @@ def split_pdf_by_pages(
 
 
 def clean_text(text: str) -> str:
-    """Clean extracted text."""
-    # Replace multiple whitespace with single space
-    text = re.sub(r'\s+', ' ', text)
+    """Normalise whitespace while keeping line and paragraph breaks for the chunker."""
+    text = text.replace("\r\n", "\n").replace("\r", "\n")
     # Remove zero-width characters
-    text = re.sub(r'[\u200b-\u200f\ufeff]', '', text)
-    # Normalize line endings
-    text = text.replace('\r\n', '\n').replace('\r', '\n')
+    text = re.sub(r"[​-‏﻿]", "", text)
+    # Collapse runs of spaces/tabs, trim around line breaks, cap blank lines at one
+    text = re.sub(r"[ \t\f\v]+", " ", text)
+    text = re.sub(r" *\n *", "\n", text)
+    text = re.sub(r"\n{3,}", "\n\n", text)
     return text.strip()

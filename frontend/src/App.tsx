@@ -4,7 +4,6 @@
 import React, { Suspense, lazy } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { useAuth } from './features/auth/AuthContext'
-import { MainLayout } from './components/layout'
 import { Spinner } from './components/ui'
 
 // Lazy load pages for code splitting
@@ -90,36 +89,13 @@ const App = () => {
           }
         />
 
-        {/* Protected routes with layout */}
-        <Route
-          element={
-            <ProtectedRoute>
-              <MainLayout>
-                <Routes>
-                  <Route path="/chat" element={<Chat />} />
-                  <Route path="/chat/:conversationId" element={<Chat />} />
-                  <Route path="/history" element={<History />} />
-                  <Route path="/documents" element={<Documents />} />
-                  <Route path="/settings" element={<Settings />} />
-                  <Route
-                    path="/admin"
-                    element={
-                      <AdminRoute>
-                        <Admin />
-                      </AdminRoute>
-                    }
-                  />
-                  <Route path="/admin/*" element={
-                    <AdminRoute>
-                      <Admin />
-                    </AdminRoute>
-                  } />
-                  <Route path="/" element={<Navigate to="/chat" replace />} />
-                </Routes>
-              </MainLayout>
-            </ProtectedRoute>
-          }
-        />
+        {/* Protected routes (each page renders its own MainLayout) */}
+        <Route path="/chat" element={<ProtectedRoute><Chat /></ProtectedRoute>} />
+        <Route path="/chat/:conversationId" element={<ProtectedRoute><Chat /></ProtectedRoute>} />
+        <Route path="/history" element={<ProtectedRoute><History /></ProtectedRoute>} />
+        <Route path="/documents" element={<ProtectedRoute><Documents /></ProtectedRoute>} />
+        <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+        <Route path="/admin/*" element={<AdminRoute><Admin /></AdminRoute>} />
 
         {/* Catch all */}
         <Route path="*" element={<Navigate to="/chat" replace />} />

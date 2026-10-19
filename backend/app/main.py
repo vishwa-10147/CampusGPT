@@ -39,10 +39,10 @@ def create_app() -> FastAPI:
         allowed_hosts=["*"] if settings.is_development else ["localhost", "127.0.0.1"],
     )
 
-    # CORS middleware
+    # CORS middleware (browsers reject "*" for credentialed requests, so always name the origin)
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=[settings.frontend_url] if not settings.is_development else ["*"],
+        allow_origins=[settings.frontend_url],
         allow_credentials=True,
         allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
         allow_headers=["*"],

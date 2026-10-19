@@ -234,7 +234,8 @@ LOCAL_EMBEDDING_MODEL=nomic-embed-text
 # Anthropic (cloud)
 # LLM_PROVIDER=anthropic
 # ANTHROPIC_API_KEY=sk-ant-xxx
-# ANTHROPIC_MODEL=claude-3-haiku-20240307
+# ANTHROPIC_MODEL=claude-opus-5-5
+# EMBEDDING_PROVIDER=local   # Anthropic has no embeddings API
 
 # ─── File Storage ─────────────────────────────────────────────
 UPLOAD_DIR=/app/uploads
@@ -243,9 +244,10 @@ ALLOWED_MIME_TYPES=application/pdf,text/plain,text/markdown
 
 # ─── RAG Configuration ────────────────────────────────────────
 CHUNK_SIZE=500
-CHUNK_OVERLAP=50
+CHUNK_OVERLAP=100
 TOP_K_RETRIEVAL=5
-SIMILARITY_THRESHOLD=0.7
+# Model-dependent: ~0.5 suits nomic-embed-text, ~0.7 suits OpenAI embeddings
+SIMILARITY_THRESHOLD=0.5
 MAX_CONTEXT_CHUNKS=3
 
 # ─── Web Scraping / Ingestion ────────────────────────────────

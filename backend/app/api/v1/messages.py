@@ -7,6 +7,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 
+from app.core.rate_limit import chat_rate_limit
 from app.api.deps import get_current_user_id, get_conversation_service, get_rag_service
 from app.schemas.message import MessageCreate, MessageResponse, StreamingToken
 from app.services.conversation_service import ConversationService
@@ -21,7 +22,7 @@ class SendMessageResponse(BaseModel):
     assistant_message: MessageResponse
 
 
-@router.post("", response_model=SendMessageResponse)
+@router.post("", response_model=SendMessageResponse, dependencies=[Depends(chat_rate_limit)])
 async def send_message(
     conversation_id: UUID,
     data: MessageCreate,

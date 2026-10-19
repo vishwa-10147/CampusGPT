@@ -5,7 +5,7 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { conversationApi, messageApi } from '../services/api'
-import { MessageBubble, ChatComposer, WelcomeScreen, ChatLoading, ChatError } from '../components/chat'
+import { MessageBubble, ChatComposer, WelcomeScreen, ChatError } from '../components/chat'
 import { MainLayout } from '../components/layout'
 import { Button } from '../components/ui'
 import { Plus, Trash2, Edit2 } from 'lucide-react'
@@ -23,10 +23,14 @@ export const Chat = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
+  const createdHereRef = useRef<string | null>(null)
 
   // Fetch messages for current conversation
   useEffect(() => {
-    if (conversationId) {
+    if (conversationId && conversationId === createdHereRef.current) {
+      // Just created by the first message; local state is already current
+      createdHereRef.current = null
+    } else if (conversationId) {
       fetchConversation(conversationId)
     } else {
       setCurrentConversation(null)
@@ -60,8 +64,20 @@ export const Chat = () => {
 
   // Send a message and stream the assistant reply
   const handleStreamResponse = useCallback(async (content: string) => {
-    if (!currentConversation) return
-    const conversationIdForSend = currentConversation.id
+    let conversationIdForSend = currentConversation?.id
+    if (!conversationIdForSend) {
+      // First message: create the conversation, titled after the question
+      try {
+        const { data: newConv } = await conversationApi.create({ title: content.slice(0, 60) })
+        conversationIdForSend = newConv.id as string
+        createdHereRef.current = newConv.id
+        setCurrentConversation(newConv)
+        navigate(`/chat/${newConv.id}`, { replace: true })
+      } catch (err: any) {
+        setError(err.response?.data?.detail || 'Failed to create conversation')
+        return
+      }
+    }
     const now = Date.now()
     const tempUserId = 'temp-' + now
     const tempId = 'temp-assistant-' + now
@@ -95,7 +111,7 @@ export const Chat = () => {
 
     let assistantContent = ''
     try {
-      for await (const { event, data } of messageApi.stream(conversationIdForSend, content)) {
+      for await (const { event, data } of messageApi.stream(conversationIdForSend!, content)) {
         if (event === 'user_message') {
           setMessages(prev => prev.map(m => (m.id === tempUserId ? data : m)))
         } else if (event === 'token' && data.token) {
@@ -121,7 +137,7 @@ export const Chat = () => {
     } finally {
       setIsLoading(false)
     }
-  }, [currentConversation, queryClient])
+  }, [currentConversation, queryClient, navigate])
 
   // Delete conversation
   const deleteConversation = useMutation({
@@ -178,7 +194,7 @@ export const Chat = () => {
                   </Button>
                 </>
               )}
-              <Button variant="primary" onClick={handleNewChat} className="lg:hidden">
+              <Button variant="primary" onClick={handleNewChat}>
                 <Plus className="h-4 w-4" />
                 New Chat
               </Button>
@@ -188,42 +204,36 @@ export const Chat = () => {
 
         {/* Chat Area */}
         <div className="flex-1 overflow-hidden flex flex-col">
-          {currentConversation ? (
-            <>
-              {messages.length === 0 ? (
-                <WelcomeScreen />
-              ) : (
-                <div
-                  className="flex-1 overflow-y-auto p-4 space-y-6 scrollbar-thin"
-                  role="log"
-                  aria-live="polite"
-                  aria-label="Conversation"
-                >
-                  {messages.map((message) => (
-                    <MessageBubble
-                      key={message.id}
-                      message={message}
-                      isStreaming={message.id.startsWith('temp-assistant') && isLoading}
-                    />
-                  ))}
-                  {isLoading && <ChatLoading />}
-                  {error && <ChatError message={error} onRetry={() => setError(null)} />}
-                  <div ref={messagesEndRef} />
-                </div>
-              )}
-
-              {/* Composer */}
-              <div className="border-t border-neutral-200 p-4 bg-white">
-                <ChatComposer
-                  onSend={handleStreamResponse}
-                  disabled={isLoading || !currentConversation}
-                  placeholder={currentConversation ? 'Ask CampusGPT...' : 'Start a new conversation to chat'}
-                />
-              </div>
-            </>
+          {messages.length === 0 ? (
+            <WelcomeScreen onPromptClick={isLoading ? undefined : handleStreamResponse} />
           ) : (
-            <WelcomeScreen />
+            <div
+              className="flex-1 overflow-y-auto p-4 space-y-6 scrollbar-thin"
+              role="log"
+              aria-live="polite"
+              aria-label="Conversation"
+            >
+              {messages.map((message) => (
+                <MessageBubble
+                  key={message.id}
+                  message={message}
+                  isStreaming={message.id.startsWith('temp-assistant') && isLoading}
+                />
+              ))}
+              {error && <ChatError message={error} onRetry={() => setError(null)} />}
+              <div ref={messagesEndRef} />
+            </div>
           )}
+          {error && messages.length === 0 && <ChatError message={error} onRetry={() => setError(null)} />}
+
+          {/* Composer */}
+          <div className="border-t border-neutral-200 p-4 bg-white">
+            <ChatComposer
+              onSend={handleStreamResponse}
+              disabled={isLoading}
+              placeholder="Ask CampusGPT..."
+            />
+          </div>
         </div>
       </div>
     </MainLayout>

@@ -262,7 +262,7 @@ export const ChatComposer = ({ onSend, disabled, placeholder = 'Ask CampusGPT...
 }
 
 // Welcome/Empty State
-export const WelcomeScreen = () => (
+export const WelcomeScreen = ({ onPromptClick }: { onPromptClick?: (prompt: string) => void }) => (
   <div className="flex-1 flex flex-col items-center justify-center px-8 text-center">
     <div className="h-16 w-16 rounded-2xl bg-primary-100 flex items-center justify-center mb-6">
       <Bot className="h-8 w-8 text-primary-600" />
@@ -272,10 +272,14 @@ export const WelcomeScreen = () => (
       Your institutional AI assistant. Ask questions about college policies, courses, documents, and more.
     </p>
     <div className="w-full max-w-md space-y-3">
-      <ExamplePrompt prompt="What's the academic calendar for 2024-25?" />
-      <ExamplePrompt prompt="How do I register for courses?" />
-      <ExamplePrompt prompt="Find the computer science syllabus" />
-      <ExamplePrompt prompt="What are the library hours?" />
+      {[
+        "What's the academic calendar for this year?",
+        'How do I register for courses?',
+        'Find the computer science syllabus',
+        'What are the library hours?',
+      ].map(prompt => (
+        <ExamplePrompt key={prompt} prompt={prompt} onClick={onPromptClick} />
+      ))}
     </div>
     <p className="mt-6 text-sm text-neutral-500">
       Responses are grounded in uploaded college documents. Upload documents to expand the knowledge base.
@@ -283,11 +287,12 @@ export const WelcomeScreen = () => (
   </div>
 )
 
-const ExamplePrompt = ({ prompt }: { prompt: string }) => (
+const ExamplePrompt = ({ prompt, onClick }: { prompt: string; onClick?: (prompt: string) => void }) => (
   <Button
     variant="secondary"
     className="w-full justify-start text-left gap-2"
-    onClick={() => {}}
+    onClick={() => onClick?.(prompt)}
+    disabled={!onClick}
   >
     <MessageSquare className="h-4 w-4 text-neutral-400" />
     <span className="truncate">{prompt}</span>

@@ -17,7 +17,8 @@ class Citation:
     chunk_index: int
     page_number: Optional[int]
     similarity_score: float
-    text_snippet: str
+    text_snippet: str  # short preview shown in the UI
+    content: str = ""  # full chunk text given to the model
 
 
 def build_citations(
@@ -49,6 +50,7 @@ def build_citations(
             page_number=chunk.page_number,
             similarity_score=round(rc.similarity, 4),
             text_snippet=snippet,
+            content=chunk.content,
         )
         citations.append(citation)
 
@@ -84,6 +86,6 @@ def format_citations_for_prompt(citations: List[Citation]) -> str:
         lines.append(
             f"[{i}] {c.original_name}{page_info} "
             f"(chunk {c.chunk_index}, similarity: {c.similarity_score:.2f}): "
-            f"{c.text_snippet}"
+            f"{c.content or c.text_snippet}"
         )
     return "\n".join(lines)

@@ -43,6 +43,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const register = async (data: { email: string; password: string; password_confirm: string; full_name: string }) => {
     await authApi.register(data)
+    // Registration doesn't set auth cookies, so sign in right away
+    await authApi.login({ email: data.email, password: data.password })
     await refreshUser()
   }
 

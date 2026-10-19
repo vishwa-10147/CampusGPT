@@ -2,7 +2,7 @@
 # CampusGPT Backend — RAG Prompts
 # ==============================================================================
 from typing import List
-from app.rag.citation import Citation
+from app.rag.citation import Citation, format_citations_for_prompt
 
 
 # ------------------------------------------------------------------------------
@@ -74,22 +74,6 @@ def build_rag_prompt(
         context=context,
         question=question,
     )
-
-
-def format_citations_for_prompt(citations: List[Citation]) -> str:
-    """Format citations for the prompt."""
-    if not citations:
-        return "No relevant sources found."
-
-    lines = ["SOURCES:"]
-    for i, c in enumerate(citations, 1):
-        page_info = f", page {c.page_number}" if c.page_number else ""
-        lines.append(
-            f"[{i}] {c.original_name}{page_info} "
-            f"(chunk {c.chunk_index}, similarity: {c.similarity_score:.2f}):\n"
-            f"    {c.text_snippet}"
-        )
-    return "\n".join(lines)
 
 
 # ------------------------------------------------------------------------------

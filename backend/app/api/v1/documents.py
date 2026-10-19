@@ -10,6 +10,7 @@ from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File,
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
 
+from app.core.rate_limit import upload_rate_limit
 from app.api.deps import get_current_user_id, get_current_user, get_document_service, get_current_admin_user
 from app.schemas.document import (
     DocumentUploadResponse,
@@ -78,7 +79,12 @@ async def ingest_mgit_sync(
         return IngestMgitResponse(**result)
 
 
-@router.post("/upload", response_model=DocumentUploadResponse, status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/upload",
+    response_model=DocumentUploadResponse,
+    status_code=status.HTTP_201_CREATED,
+    dependencies=[Depends(upload_rate_limit)],
+)
 async def upload_document(
     background_tasks: BackgroundTasks,
     file: UploadFile = File(...),

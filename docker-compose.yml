@@ -46,6 +46,8 @@ services:
       - DATABASE_URL=postgresql+asyncpg://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@db:5432/${POSTGRES_DB:-campusgpt}
       - FRONTEND_URL=http://localhost:5173
       - LOCAL_LLM_BASE_URL=http://ollama:11434
+      # Bind mounts on Docker Desktop (Windows/macOS) don't deliver file events to --reload
+      - WATCHFILES_FORCE_POLLING=true
     env_file:
       - .env
     volumes:

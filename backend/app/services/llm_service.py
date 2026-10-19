@@ -12,6 +12,7 @@ from app.ai.base import (
 )
 from app.ai.openai_adapter import OpenAILLMProvider
 from app.ai.local_adapter import LocalLLMProvider
+from app.ai.anthropic_adapter import AnthropicLLMProvider
 from app.core.config import settings
 
 
@@ -34,6 +35,10 @@ class LLMService:
             if not settings.local_llm_base_url:
                 raise ValueError("LOCAL_LLM_BASE_URL is required for local provider")
             self._provider = LocalLLMProvider()
+        elif provider_name == "anthropic":
+            if not settings.anthropic_api_key:
+                raise ValueError("ANTHROPIC_API_KEY is required for Anthropic provider")
+            self._provider = AnthropicLLMProvider()
         else:
             raise ValueError(f"Unknown LLM provider: {provider_name}")
 

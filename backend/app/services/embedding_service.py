@@ -18,8 +18,11 @@ class EmbeddingService:
 
     def _initialize_provider(self) -> None:
         """Initialize the configured embedding provider."""
-        # For MVP, embedding provider follows LLM provider
+        # Embeddings follow the LLM provider, except Anthropic, which has no
+        # embeddings API: then EMBEDDING_PROVIDER (default "local") decides.
         provider_name = settings.llm_provider.lower()
+        if provider_name == "anthropic":
+            provider_name = settings.embedding_provider.lower()
 
         if provider_name == "openai":
             if not settings.openai_api_key:

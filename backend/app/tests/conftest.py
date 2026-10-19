@@ -1,12 +1,15 @@
 # ==============================================================================
 # CampusGPT Backend — Test Configuration
 # ==============================================================================
+import os
+
 import pytest
 import pytest_asyncio
 from httpx import AsyncClient, ASGITransport
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
 from sqlalchemy.pool import NullPool
 from sqlalchemy import text
+from sqlalchemy.engine import make_url
 
 from app.main import app
 from app.core.database import get_db
@@ -14,14 +17,38 @@ from app.models.base import Base
 from app.core.config import settings
 
 
-# Use the main database for tests (in dev environment)
-# In production, you'd want a separate test database
-TEST_DATABASE_URL = settings.database_url
+# Tests create and drop every table, so they must never touch the dev database.
+# Default: the dev URL with "_test" appended to the database name.
+_main_url = make_url(settings.database_url)
+TEST_DATABASE_URL = make_url(
+    os.environ.get("TEST_DATABASE_URL")
+    or _main_url.set(database=f"{_main_url.database}_test").render_as_string(hide_password=False)
+)
+if TEST_DATABASE_URL.database == _main_url.database:
+    raise RuntimeError("TEST_DATABASE_URL points at the main database; refusing to run tests against it")
+
+# Most tests hit auth endpoints far faster than the real limit allows
+settings.rate_limit_enabled = False
 
 
-@pytest_asyncio.fixture(scope="session")
+async def _ensure_test_database() -> None:
+    """Create the test database if it doesn't exist yet."""
+    admin_engine = create_async_engine(
+        TEST_DATABASE_URL.set(database="postgres"), poolclass=NullPool, isolation_level="AUTOCOMMIT"
+    )
+    async with admin_engine.connect() as conn:
+        exists = await conn.scalar(
+            text("SELECT 1 FROM pg_database WHERE datname = :name"), {"name": TEST_DATABASE_URL.database}
+        )
+        if not exists:
+            await conn.execute(text(f'CREATE DATABASE "{TEST_DATABASE_URL.database}"'))
+    await admin_engine.dispose()
+
+
+@pytest_asyncio.fixture(scope="session", loop_scope="session")
 async def test_engine():
     """Create test database engine."""
+    await _ensure_test_database()
     engine = create_async_engine(TEST_DATABASE_URL, poolclass=NullPool)
     async with engine.begin() as conn:
         await conn.execute(text("CREATE EXTENSION IF NOT EXISTS vector"))

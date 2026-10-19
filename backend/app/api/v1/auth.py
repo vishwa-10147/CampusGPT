@@ -5,6 +5,7 @@ from fastapi import APIRouter, Depends, Response, HTTPException, status, Cookie
 from fastapi.security import HTTPBearer
 
 from app.core.config import settings
+from app.core.rate_limit import auth_rate_limit
 from app.api.deps import get_auth_service, get_current_user_id, get_current_user
 from app.schemas.auth import RegisterRequest, LoginRequest, TokenResponse, UserResponse
 from app.services.auth_service import AuthService
@@ -38,7 +39,12 @@ def set_auth_cookies(response: Response, access_token: str, refresh_token: str) 
     )
 
 
-@router.post("/register", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/register",
+    response_model=UserResponse,
+    status_code=status.HTTP_201_CREATED,
+    dependencies=[Depends(auth_rate_limit)],
+)
 async def register(
     data: RegisterRequest,
     auth_service: AuthService = Depends(get_auth_service),
@@ -51,7 +57,7 @@ async def register(
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
 
 
-@router.post("/login", response_model=TokenResponse)
+@router.post("/login", response_model=TokenResponse, dependencies=[Depends(auth_rate_limit)])
 async def login(
     response: Response,
     data: LoginRequest,

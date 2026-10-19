@@ -2,6 +2,8 @@
 # CampusGPT Backend — Ingestion Service
 # ==============================================================================
 import asyncio
+import hashlib
+import re
 from typing import Optional, List
 from uuid import UUID
 from datetime import datetime
@@ -17,6 +19,12 @@ from app.rag.chunker import split_text_recursive, clean_text, TextChunk
 from app.repositories.document_repo import DocumentRepository, DocumentChunkRepository
 from app.models.document import Document, DocumentChunk
 from app.core.config import settings
+
+
+def scraped_filename(source_name: str, url: str) -> str:
+    """Stable, unique filename for a scraped page: readable slug + URL hash."""
+    slug = re.sub(r"[^a-z0-9]+", "_", url.lower().split("://", 1)[-1]).strip("_")[:80]
+    return f"{source_name}_{slug}_{hashlib.sha1(url.encode()).hexdigest()[:10]}.txt"
 
 
 class IngestionService:
@@ -51,7 +59,7 @@ class IngestionService:
             try:
                 # Create document record
                 doc = await self.doc_repo.create(
-                    filename=f"{source_name}_{scraped.url.replace('https://', '').replace('/', '_')[:100]}.txt",
+                    filename=scraped_filename(source_name, scraped.url),
                     original_name=scraped.title[:200],
                     mime_type="text/plain",
                     size_bytes=len(scraped.content.encode("utf-8")),
@@ -60,7 +68,7 @@ class IngestionService:
                 )
 
                 # Process content: chunk + embed
-                chunks = await self._process_content(doc.id, scraped.content)
+                chunks = await self._process_content(doc.id, scraped.content, source_url=scraped.url)
 
                 if chunks:
                     await self.doc_repo.update_status(doc.id, "ready")
@@ -80,7 +88,9 @@ class IngestionService:
 
         return created_docs
 
-    async def _process_content(self, document_id: UUID, content: str) -> List[DocumentChunk]:
+    async def _process_content(
+        self, document_id: UUID, content: str, source_url: Optional[str] = None
+    ) -> List[DocumentChunk]:
         """Process text content: chunk, embed, store."""
         try:
             # Clean text
@@ -134,6 +144,7 @@ class IngestionService:
                             **text_chunk.metadata,
                             "char_count": len(text_chunk.content),
                             "source_type": "web",
+                            "source_url": source_url,
                         },
                     )
                     chunk_records.append(chunk_record)

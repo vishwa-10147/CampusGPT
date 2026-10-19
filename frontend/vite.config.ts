@@ -12,6 +12,8 @@ export default defineConfig({
   server: {
     port: 5173,
     host: '0.0.0.0',
+    // Docker on Windows/macOS bind mounts don't deliver file events; poll instead
+    watch: { usePolling: true, interval: 300 },
     proxy: {
       '/api': {
         target: 'http://localhost:8000',

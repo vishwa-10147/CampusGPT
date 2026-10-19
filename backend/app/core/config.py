@@ -59,13 +59,16 @@ class Settings(BaseSettings):
 
     # Anthropic
     anthropic_api_key: Optional[str] = Field(default=None, alias="ANTHROPIC_API_KEY")
-    anthropic_model: str = Field(default="claude-3-haiku-20240307", alias="ANTHROPIC_MODEL")
+    anthropic_model: str = Field(default="claude-opus-5-5", alias="ANTHROPIC_MODEL")
     anthropic_base_url: str = Field(default="https://api.anthropic.com/v1", alias="ANTHROPIC_BASE_URL")
 
     # Local
     local_llm_base_url: Optional[str] = Field(default=None, alias="LOCAL_LLM_BASE_URL")
     local_llm_model: Optional[str] = Field(default=None, alias="LOCAL_LLM_MODEL")
     local_embedding_model: Optional[str] = Field(default=None, alias="LOCAL_EMBEDDING_MODEL")
+
+    # Embedding source when LLM_PROVIDER=anthropic (Anthropic has no embeddings API)
+    embedding_provider: str = Field(default="local", alias="EMBEDDING_PROVIDER")
 
     # Must match the embedding model output (nomic-embed-text: 768, text-embedding-3-small: 1536)
     embedding_dimension: int = Field(default=768, alias="EMBEDDING_DIMENSION")
@@ -85,6 +88,7 @@ class Settings(BaseSettings):
     # --------------------------------------------------------------------------
     # Rate Limiting
     # --------------------------------------------------------------------------
+    rate_limit_enabled: bool = Field(default=True, alias="RATE_LIMIT_ENABLED")
     rate_limit_auth_per_minute: int = Field(default=5, alias="RATE_LIMIT_AUTH_PER_MINUTE")
     rate_limit_chat_per_minute: int = Field(default=30, alias="RATE_LIMIT_CHAT_PER_MINUTE")
     rate_limit_upload_per_hour: int = Field(default=10, alias="RATE_LIMIT_UPLOAD_PER_HOUR")
@@ -99,9 +103,9 @@ class Settings(BaseSettings):
     # RAG Configuration
     # --------------------------------------------------------------------------
     chunk_size: int = Field(default=500, alias="CHUNK_SIZE")
-    chunk_overlap: int = Field(default=50, alias="CHUNK_OVERLAP")
+    chunk_overlap: int = Field(default=100, alias="CHUNK_OVERLAP")
     top_k_retrieval: int = Field(default=5, alias="TOP_K_RETRIEVAL")
-    similarity_threshold: float = Field(default=0.7, alias="SIMILARITY_THRESHOLD")
+    similarity_threshold: float = Field(default=0.5, alias="SIMILARITY_THRESHOLD")
     max_context_chunks: int = Field(default=3, alias="MAX_CONTEXT_CHUNKS")
 
     # --------------------------------------------------------------------------

@@ -103,10 +103,7 @@ class DocumentService:
             return None
 
         chunk_count = await self.chunk_repo.count_document_chunks(document_id)
-        return DocumentResponse(
-            **DocumentResponse.model_validate(document).model_dump(),
-            chunk_count=chunk_count,
-        )
+        return DocumentResponse.model_validate(document).model_copy(update={"chunk_count": chunk_count})
 
     async def list_user_documents(
         self,
@@ -127,10 +124,7 @@ class DocumentService:
         doc_responses = []
         for doc in documents:
             chunk_count = await self.chunk_repo.count_document_chunks(doc.id)
-            doc_responses.append(DocumentResponse(
-                **DocumentResponse.model_validate(doc).model_dump(),
-                chunk_count=chunk_count,
-            ))
+            doc_responses.append(DocumentResponse.model_validate(doc).model_copy(update={"chunk_count": chunk_count}))
 
         return DocumentListResponse(
             documents=doc_responses,
@@ -158,10 +152,7 @@ class DocumentService:
         doc_responses = []
         for doc in documents:
             chunk_count = await self.chunk_repo.count_document_chunks(doc.id)
-            doc_responses.append(DocumentResponse(
-                **DocumentResponse.model_validate(doc).model_dump(),
-                chunk_count=chunk_count,
-            ))
+            doc_responses.append(DocumentResponse.model_validate(doc).model_copy(update={"chunk_count": chunk_count}))
 
         return DocumentListResponse(
             documents=doc_responses,

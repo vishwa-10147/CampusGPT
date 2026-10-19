@@ -114,6 +114,13 @@ class DocumentChunk(Base, UUIDMixin, TimestampMixin):
     # Table-level indexes
     __table_args__ = (
         Index("ix_document_chunks_document_id_chunk_index", "document_id", "chunk_index"),
+        # Approximate nearest-neighbour index for cosine similarity search
+        Index(
+            "ix_document_chunks_embedding_hnsw",
+            "embedding",
+            postgresql_using="hnsw",
+            postgresql_ops={"embedding": "vector_cosine_ops"},
+        ),
     )
 
     def __repr__(self) -> str:
